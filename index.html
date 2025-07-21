@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca ETEC Darcy - Empréstimo de Livros</title>
+    <style>
+        /* Estilos básicos para ver a estrutura - serão refinados no CSS */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: #f5f5dc; /* Bege Claro/Areia */
+            color: #333;
+        }
+        header {
+            background-color: #add8e6; /* Azul Sereno */
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        .btn-login {
+            background-color: #8B4513; /* Marrom Avelã */
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-filter-section {
+            background-color: #b2dfdb; /* Verde Menta Suave */
+            padding: 20px;
+            text-align: center;
+            border-radius: 0 0 10px 10px;
+        }
+        .search-filter-section input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 70%;
+            max-width: 400px;
+            margin-right: 10px;
+        }
+        .filter-buttons button {
+            background-color: #8B4513;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .book-list-container {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .book-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .book-card img {
+            max-width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .book-card h3 {
+            margin-top: 0;
+            color: #add8e6; /* Azul Sereno */
+        }
+        .book-card p {
+            font-size: 0.9em;
+            color: #555;
+        }
+        .book-status {
+            font-weight: bold;
+            color: green; /* Será dinâmico via JS */
+            margin-bottom: 10px;
+        }
+        .btn-emprestar {
+            background-color: #b2dfdb; /* Verde Menta Suave */
+            color: #8B4513; /* Marrom Avelã */
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        footer {
+            background-color: #8B4513; /* Marrom Avelã */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        /* Modal de Empréstimo */
+        .modal {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.show {
+            display: flex; /* Exibido quando a classe 'show' é adicionada */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-content input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .modal-content button {
+            background-color: #b2dfdb;
+            color: #8B4513;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        /* Área Administrativa (escondida inicialmente) */
+        .admin-area {
+            display: none; /* Será exibido via JS após login */
+            padding: 20px;
+            background-color: #f0f8ff; /* Um azul bem clarinho para diferenciar */
+            margin-top: 20px;
+            border-top: 2px solid #add8e6;
+        }
+        .admin-area.show {
+            display: block; /* Exibido quando a classe 'show' é adicionada */
+        }
+        .admin-area h2 {
+            color: #8B4513;
+        }
+        .admin-section {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .admin-section input, .admin-section select, .admin-section button {
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .admin-section button {
+            background-color: #add8e6;
+            color: #333;
+            cursor: pointer;
+            border: none;
+            margin-left: 10px;
+        }
+        .admin-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .admin-section li {
+            background-color: #e6f7ff;
+            margin-bottom: 5px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-section li button {
+            background-color: #ff9999; /* Vermelho para remover/devolver */
+            color: white;
+            padding: 5px 10px;
+        }
+        .btn-logout { /* NOVO ESTILO AQUI */
+            background-color: #ff6347; /* Um tom de vermelho para "sair" */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px; /* Espaçamento abaixo do botão */
+        }
+        .btn-logout:hover {
+            background-color: #e55337;
+        }
+        /* Estilos para as Abas da Área Administrativa - NOVO AQUI */
+        .tabs {
+            display: flex;
+            justify-content: center; /* Centraliza os botões das abas */
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #add8e6; /* Linha divisória abaixo das abas */
+        }
+        .tab-button {
+            background-color: #e0e0e0; /* Cinza claro para abas inativas */
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px 8px 0 0; /* Bordas arredondadas no topo */
+            cursor: pointer;
+            margin: 0 5px; /* Espaço entre os botões */
+            transition: background-color 0.3s ease;
+        }
+        .tab-button.active {
+            background-color: #add8e6; /* Azul Sereno para aba ativa */
+            color: white;
+            font-weight: bold;
+        }
+        .tab-button:hover:not(.active) {
+            background-color: #d0d0d0; /* Escurece um pouco ao passar o mouse */
+        }
+        .tab-content {
+            display: none; /* Esconde o conteúdo das abas por padrão */
+            padding-top: 20px; /* Espaçamento entre as abas e o conteúdo */
+        }
+        .tab-content.active {
+            display: block; /* Exibe o conteúdo da aba ativa */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Biblioteca ETEC Darcy</h1>
+        <button class="btn-login" id="adminLoginBtn">Login Bibliotecária</button>
+    </header>
+
+    <main>
+        <section class="search-filter-section">
+            <input type="text" id="searchInput" placeholder="Pesquisar por título, autor, etc.">
+            <div class="filter-buttons">
+                <button data-filter="all">Todos</button>
+                <button data-filter="available">Disponíveis</button>
+                <button data-filter="fiction">Ficção</button>
+                <button data-filter="nonfiction">Não Ficção</button>
+                </div>
+        </section>
+
+        <section class="book-list-container" id="bookList">
+            <div class="book-card" data-book-id="1" data-book-title="O Pequeno Príncipe" data-book-author="Antoine de Saint-Exupéry" data-book-genre="Ficção" data-book-status="available">
+                <img src="https://via.placeholder.com/100x150?text=Capa+Livro+1" alt="Capa do Livro 1">
+                <h3>O Pequeno Príncipe</h3>
+                <p>Autor: Antoine de Saint-Exupéry</p>
+                <p class="book-status">Disponível</p>
+                <button class="btn-emprestar">Emprestar</button>
+            </div>
+            <div class="book-card" data-book-id="2" data-book-title="Dom Casmurro" data-book-author="Machado de Assis" data-book-genre="Ficção" data-book-status="borrowed">
+                <img src="https://via.placeholder.com/100x150?text=Capa+Livro+2" alt="Capa do Livro 2">
+                <h3>Dom Casmurro</h3>
+                <p>Autor: Machado de Assis</p>
+                <p class="book-status">Emprestado - Retorno: 20/08</p>
+                <button class="btn-emprestar" disabled>Emprestar</button>
+            </div>
+            <div class="book-card" data-book-id="3" data-book-title="1984" data-book-author="George Orwell" data-book-genre="Ficção" data-book-status="available">
+                <img src="https://via.placeholder.com/100x150?text=Capa+Livro+3" alt="Capa do Livro 3">
+                <h3>1984</h3>
+                <p>Autor: George Orwell</p>
+                <p class="book-status">Disponível</p>
+                <button class="btn-emprestar">Emprestar</button>
+            </div>
+        </section>
+
+        <div id="loanModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Solicitar Empréstimo</h2>
+                <p>Você está solicitando o livro: <strong id="modalBookTitle"></strong></p>
+                <input type="text" id="studentName" placeholder="Seu Nome Completo" required>
+                <input type="text" id="studentClass" placeholder="Sua Turma (Ex: 1º ETIM Informática)" required>
+                <button id="confirmLoanBtn">Confirmar Empréstimo</button>
+                <p id="loanCodeDisplay" style="margin-top: 15px; font-weight: bold; color: green; display: none;"></p>
+                <p style="font-size: 0.8em; margin-top: 10px;">Lembre-se: o prazo de devolução é de 30 dias a partir da retirada na secretaria.</p>
+            </div>
+        </div>
+
+        <section class="admin-area" id="adminArea">
+            <h2>Área Administrativa</h2>
+            <button class="btn-logout" id="adminLogoutBtn">Sair da Área Administrativa</button> 
+
+            <div class="tabs">
+                <button class="tab-button active" data-tab="manageBooks">Gerenciar Livros</button>
+                <button class="tab-button" data-tab="manageLoans">Gerenciar Empréstimos</button>
+            </div>
+
+            <div id="manageBooks" class="tab-content active">
+                <div class="admin-section">
+                    <h3>Gerenciar Livros</h3>
+                    <h4>Adicionar Novo Livro</h4>
+                    <input type="text" id="newBookTitle" placeholder="Título do Livro" required>
+                    <input type="text" id="newBookAuthor" placeholder="Autor" required>
+                    <input type="text" id="newBookGenre" placeholder="Gênero" required>
+
+                    <label for="newBookCoverURL">URL da Imagem de Capa (Opcional):</label>
+                    <input type="text" id="newBookCoverURL" placeholder="Cole a URL da imagem aqui">
+
+                    <label for="newBookCoverFile">Ou Selecionar Arquivo de Imagem:</label>
+                    <input type="file" id="newBookCoverFile" accept="image/*">
+                    <button id="addBookBtn">Adicionar Livro</button>
+
+                    <h4>Meus Livros Cadastrados</h4>
+                    <ul id="currentBooksList">
+                        <li>Livro 1 (Autor) - <button data-action="delete" data-book-id="1">Excluir</button> <button data-action="edit" data-book-id="1">Editar</button></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="manageLoans" class="tab-content">
+                <div class="admin-section">
+                    <h3>Gerenciar Empréstimos</h3>
+                    <h4>Solicitações Pendentes</h4>
+                    <ul id="pendingLoansList">
+                        <li>Aluno: [Nome], Turma: [Turma], Livro: [Título] - Código: [CODIGO] <button data-action="confirm-pickup" data-loan-code="CODIGO">Confirmar Retirada</button></li>
+                    </ul>
+
+                    <h4>Registrar Devolução</h4>
+                    <input type="text" id="returnBookCode" placeholder="Código do Livro ou Nome do Aluno">
+                    <button id="confirmReturnBtn">Confirmar Devolução</button>
+
+                    <h4>Livros Emprestados Atualmente</h4>
+                    <ul id="currentLoansList">
+                        <li>Livro: [Título], Aluno: [Nome], Turma: [Turma] - <button data-action="manual-return" data-loan-id="XYZ">Marcar Devolvido</button></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Biblioteca ETEC Darcy - Todos os direitos reservados.</p>
+        <p>Horário de Funcionamento: Segunda a Sexta, das 8h às 17h.</p>
+        <p>Contato: (XX) XXXX-XXXX | biblioteca.darcy@etec.sp.gov.br</p>
+    </footer>
+
+   <script>
+        // --- Variáveis Globais e Seletores de Elementos ---
+        const loanModal = document.getElementById('loanModal');
+        const closeButton = document.querySelector('.close-button');
+        const confirmLoanBtn = document.getElementById('confirmLoanBtn');
+        const modalBookTitle = document.getElementById('modalBookTitle');
+        const studentNameInput = document.getElementById('studentName');
+        const studentClassInput = document.getElementById('studentClass');
+        const loanCodeDisplay = document.getElementById('loanCodeDisplay');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminArea = document.getElementById('adminArea');
+        const adminLogoutBtn = document.getElementById('adminLogoutBtn'); 
+
+        // NOVAS VARIÁVEIS PARA GERENCIAMENTO DE EMPRÉSTIMOS
+        const pendingLoansList = document.getElementById('pendingLoansList'); // Lista de solicitações pendentes
+        const currentLoansList = document.getElementById('currentLoansList'); // Lista de livros emprestados atualmente
+
+        // NOVAS VARIÁVEIS PARA GERENCIAMENTO DE LIVROS
+        const newBookTitleInput = document.getElementById('newBookTitle');
+        const newBookAuthorInput = document.getElementById('newBookAuthor');
+        const newBookGenreInput = document.getElementById('newBookGenre');
+        const newBookCoverURLInput = document.getElementById('newBookCoverURL'); // Campo de URL
+        const newBookCoverFileInput = document.getElementById('newBookCoverFile'); // Campo de arquivo
+        const addBookBtn = document.getElementById('addBookBtn');
+        const currentBooksList = document.getElementById('currentBooksList'); // Lista da área admin
+        const bookListContainer = document.getElementById('bookList'); // Lista principal de livros
+        
+        // NOVAS VARIÁVEIS PARA AS ABAS
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        let currentBookId = null; 
+        let editingBookId = null; 
+        
+        // --- Funções de Gerenciamento de Dados (Livros) ---
+
+        // Função para carregar livros do localStorage
+        function loadBooks() {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            return books;
+        }
+
+        // Função para salvar livros no localStorage
+        function saveBooks(books) {
+            localStorage.setItem('books', JSON.stringify(books));
+        }
+
+        // Função para gerar um ID único para cada livro (muito importante!)
+        function generateUniqueId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // --- Funções de Gerenciamento de Dados (Empréstimos) ---
+
+        // Função para carregar empréstimos do localStorage
+        function loadLoans() {
+            const loans = JSON.parse(localStorage.getItem('loans')) || [];
+            return loans;
+        }
+
+        // Função para salvar empréstimos no localStorage
+        function saveLoans(loans) {
+            localStorage.setItem('loans', JSON.stringify(loans));
+        }
+
+        // --- Funções para Renderizar Livros na UI ---
+
+        // Função para exibir os livros nas duas listas
+        function renderBooks() {
+            const books = loadBooks(); // Carrega os livros do localStorage
+
+            // Limpa as listas antes de renderizar
+            currentBooksList.innerHTML = '';
+            bookListContainer.innerHTML = '';
+
+            if (books.length === 0) {
+                currentBooksList.innerHTML = '<li>Nenhum livro cadastrado.</li>';
+                bookListContainer.innerHTML = '<p style="text-align: center; margin-top: 50px;">Nenhum livro disponível na biblioteca no momento.</p>';
+                // Remove os event listeners de emprestimo se não houver livros
+                document.querySelectorAll('.btn-emprestar').forEach(button => {
+                    // Remove listener anterior para evitar duplicações se renderBooks for chamada múltiplas vezes
+                    const oldListener = button._eventListener; 
+                    if (oldListener) {
+                        button.removeEventListener('click', oldListener);
+                    }
+                });
+                return;
+            }
+
+            // Renderiza na lista principal (para alunos)
+            books.forEach(book => {
+                const bookCard = `
+                    <div class="book-card" data-book-id="${book.id}" data-book-title="${book.title}" data-book-author="${book.author}" data-book-genre="${book.genre}" data-book-status="${book.status}">
+                        <img src="${book.cover || 'https://via.placeholder.com/100x150?text=Sem+Capa'}" alt="Capa do Livro: ${book.title}">
+                        <h3>${book.title}</h3>
+                        <p>Autor: ${book.author}</p>
+                        <p class="book-status">${book.status === 'available' ? 'Disponível' : `Emprestado - Retorno: ${book.returnDate ? new Date(book.returnDate).toLocaleDateString() : 'N/A'}`}</p>
+                        <button class="btn-emprestar" ${book.status !== 'available' ? 'disabled' : ''}>Emprestar</button>
+                    </div>
+                `;
+                bookListContainer.insertAdjacentHTML('beforeend', bookCard);
+            });
+
+            // Re-adiciona os event listeners para os botões de empréstimo (já que limpamos e recriamos)
+            document.querySelectorAll('.btn-emprestar').forEach(button => {
+                // Remove listener anterior para evitar duplicações se renderBooks for chamada múltiplas vezes
+                const oldListener = button._eventListener; 
+                if (oldListener) {
+                    button.removeEventListener('click', oldListener);
+                }
+                const newListener = (event) => {
+                    const bookCard = event.target.closest('.book-card');
+                    const bookTitle = bookCard.querySelector('h3').textContent;
+                    const bookId = bookCard.dataset.bookId;
+                    openLoanModal(bookTitle, bookId);
+                };
+                button.addEventListener('click', newListener);
+                button._eventListener = newListener; // Guarda a referência do novo listener
+            });
+
+
+            // Renderiza na lista da área administrativa (para bibliotecária)
+            books.forEach(book => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    ${book.title} (${book.author}) - Status: ${book.status === 'available' ? 'Disponível' : 'Emprestado'}
+                    <button data-action="delete" data-book-id="${book.id}">Excluir</button> 
+                    <button data-action="edit" data-book-id="${book.id}">Editar</button>
+                `;
+                currentBooksList.appendChild(li);
+            });
+
+            // Atualiza também os empréstimos
+            renderLoans(); 
+        }
+
+        // --- Funções para Renderizar Empréstimos na UI (Área Administrativa) ---
+
+        function renderLoans() {
+            const loans = loadLoans(); // Carrega todos os empréstimos
+
+            // Limpa as listas antes de preenchê-las
+            pendingLoansList.innerHTML = '';
+            currentLoansList.innerHTML = '';
+
+            const books = loadBooks(); // Precisamos dos dados dos livros para pegar o título etc.
+
+            if (loans.length === 0) {
+                pendingLoansList.innerHTML = '<li>Nenhuma solicitação pendente.</li>';
+                currentLoansList.innerHTML = '<li>Nenhum livro emprestado no momento.</li>';
+                return;
+            }
+
+            // Separa empréstimos pendentes de ativos
+            const pending = loans.filter(loan => loan.status === 'pending');
+            const active = loans.filter(loan => loan.status === 'borrowed');
+
+            // Renderiza Solicitações Pendentes
+            if (pending.length === 0) {
+                pendingLoansList.innerHTML = '<li>Nenhuma solicitação pendente.</li>';
+            } else {
+                pending.forEach(loan => {
+                    const book = books.find(b => b.id === loan.bookId);
+                    if (book) {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            Aluno: ${loan.studentName}, Turma: ${loan.studentClass}, Livro: ${book.title} - Código: ${loan.loanCode} 
+                            <button data-action="confirm-pickup" data-loan-id="${loan.id}">Confirmar Retirada</button>
+                        `;
+                        pendingLoansList.appendChild(li);
+                    }
+                });
+            }
+
+            // Renderiza Livros Emprestados Atualmente
+            if (active.length === 0) {
+                currentLoansList.innerHTML = '<li>Nenhum livro emprestado no momento.</li>';
+            } else {
+                active.forEach(loan => {
+                    const book = books.find(b => b.id === loan.bookId);
+                    if (book) {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            Livro: ${book.title}, Aluno: ${loan.studentName}, Turma: ${loan.studentClass} - 
+                            <button data-action="mark-returned" data-loan-id="${loan.id}">Marcar Devolvido</button>
+                        `;
+                        currentLoansList.appendChild(li);
+                    }
+                });
+            }
+
+            // TODO: Event listeners para 'Confirmar Retirada' e 'Marcar Devolvido' serão adicionados em um próximo passo
+        }
+
+
+        // --- Funções para o Modal de Empréstimo ---
+        function openLoanModal(bookTitle, bookId) {
+            modalBookTitle.textContent = bookTitle;
+            currentBookId = bookId; 
+            
+            loanCodeDisplay.style.display = 'none'; 
+            loanCodeDisplay.textContent = ''; 
+            studentNameInput.value = ''; 
+            studentClassInput.value = ''; 
+            confirmLoanBtn.disabled = false; 
+
+            loanModal.classList.add('show');
+        }
+
+        function closeLoanModal() {
+            loanModal.classList.remove('show');
+        }
+
+        // --- Event Listeners para o Modal de Empréstimo ---
+        // O event listener para .btn-emprestar é adicionado dentro de renderBooks().
+
+        closeButton.addEventListener('click', closeLoanModal);
+
+        window.addEventListener('click', (event) => {
+            if (event.target === loanModal) {
+                closeLoanModal();
+            }
+        });
+
+        confirmLoanBtn.addEventListener('click', () => {
+            const studentName = studentNameInput.value.trim();
+            const studentClass = studentClassInput.value.trim();
+
+            if (studentName === '' || studentClass === '') {
+                alert('Por favor, preencha seu nome e turma para prosseguir.');
+                return;
+            }
+
+            const loanCode = `ETEC-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+            
+            // Cria o objeto de empréstimo
+            const newLoan = {
+                id: generateUniqueId(), // ID único para o empréstimo
+                bookId: currentBookId, // ID do livro que está sendo emprestado
+                studentName: studentName,
+                studentClass: studentClass,
+                loanCode: loanCode,
+                loanDate: new Date().toISOString(), // Data atual do empréstimo (ISO para fácil conversão)
+                returnDate: null, // Ainda não devolvido
+                status: 'pending' // Status inicial: pendente de confirmação
+            };
+
+            const loans = loadLoans(); // Carrega empréstimos existentes
+            loans.push(newLoan); // Adiciona o novo empréstimo
+            saveLoans(loans); // Salva a lista atualizada
+
+            loanCodeDisplay.textContent = `Seu código de retirada: ${loanCode}`;
+            loanCodeDisplay.style.display = 'block';
+
+            confirmLoanBtn.disabled = true;
+
+            // Atualiza a área administrativa para exibir a nova solicitação
+            // renderBooks já chama renderLoans, então é suficiente para atualizar tudo
+            renderBooks(); 
+        });
+
+        // --- Gerenciamento da Área Administrativa (Login/Logout) ---
+
+        adminLoginBtn.addEventListener('click', () => {
+            window.location.href = 'admin_login.html';
+        });
+
+        adminLogoutBtn.addEventListener('click', () => { 
+            localStorage.removeItem('isLoggedIn');
+            adminArea.classList.remove('show');
+            alert("Você saiu da área administrativa.");
+        });
+
+        // --- Gerenciamento de Livros na Área Administrativa (Adicionar/Editar Livro) ---
+
+        addBookBtn.addEventListener('click', async () => { 
+            const title = newBookTitleInput.value.trim();
+            const author = newBookAuthorInput.value.trim();
+            const genre = newBookGenreInput.value.trim();
+            const coverURL = newBookCoverURLInput.value.trim();
+            const coverFile = newBookCoverFileInput.files[0]; 
+
+            if (!title || !author || !genre) {
+                alert('Por favor, preencha Título, Autor e Gênero do livro.');
+                return;
+            }
+
+            let bookCover = coverURL; 
+
+            if (!bookCover && coverFile) {
+                const reader = new FileReader();
+                reader.readAsDataURL(coverFile); 
+
+                await new Promise((resolve) => {
+                    reader.onload = () => {
+                        bookCover = reader.result; 
+                        resolve();
+                    };
+                    reader.onerror = () => {
+                        console.error("Erro ao ler o arquivo de imagem.");
+                        alert("Não foi possível ler o arquivo de imagem. Tente uma URL ou outro arquivo.");
+                        bookCover = ''; 
+                        resolve();
+                    };
+                });
+            }
+
+            let books = loadBooks(); 
+            let message = '';
+
+            if (editingBookId) { // Se estamos em modo de edição
+                books = books.map(book => {
+                    if (book.id === editingBookId) {
+                        return {
+                            ...book, 
+                            title: title,
+                            author: author,
+                            genre: genre,
+                            cover: bookCover || 'https://via.placeholder.com/100x150?text=Sem+Capa'
+                        };
+                    }
+                    return book;
+                });
+                message = 'Livro atualizado com sucesso!';
+                editingBookId = null; 
+                addBookBtn.textContent = 'Adicionar Livro'; 
+            } else { // Se estamos adicionando um novo livro
+                const newBook = {
+                    id: generateUniqueId(), 
+                    title: title,
+                    author: author,
+                    genre: genre,
+                    cover: bookCover || 'https://via.placeholder.com/100x150?text=Sem+Capa', 
+                    status: 'available', 
+                    returnDate: null 
+                };
+                books.push(newBook); 
+                message = 'Livro adicionado com sucesso!';
+            }
+            
+            saveBooks(books); 
+            renderBooks(); 
+
+            // Limpa os campos do formulário
+            newBookTitleInput.value = '';
+            newBookAuthorInput.value = '';
+            newBookGenreInput.value = '';
+            newBookCoverURLInput.value = '';
+            newBookCoverFileInput.value = ''; 
+            alert(message);
+        });
+
+        // --- Gerenciamento de Livros (Excluir/Editar) ---
+        currentBooksList.addEventListener('click', (event) => {
+            // Lógica de EXCLUIR 
+            if (event.target.dataset.action === 'delete') {
+                const bookIdToDelete = event.target.dataset.bookId;
+                
+                if (confirm('Tem certeza que deseja excluir este livro do catálogo?')) {
+                    let books = loadBooks(); 
+                    books = books.filter(book => book.id !== bookIdToDelete);
+                    saveBooks(books); 
+                    renderBooks(); 
+                    alert('Livro excluído com sucesso!');
+                }
+            } 
+            // Lógica para EDITAR
+            else if (event.target.dataset.action === 'edit') {
+                const bookIdToEdit = event.target.dataset.bookId;
+                const books = loadBooks();
+                const bookToEdit = books.find(book => book.id === bookIdToEdit);
+
+                if (bookToEdit) {
+                    newBookTitleInput.value = bookToEdit.title;
+                    newBookAuthorInput.value = bookToEdit.author;
+                    newBookGenreInput.value = bookToEdit.genre;
+                    if (bookToEdit.cover && !bookToEdit.cover.startsWith('data:image')) {
+                        newBookCoverURLInput.value = bookToEdit.cover;
+                    } else {
+                        newBookCoverURLInput.value = ''; 
+                    }
+                    newBookCoverFileInput.value = ''; 
+
+                    editingBookId = bookIdToEdit; 
+                    addBookBtn.textContent = 'Salvar Alterações'; 
+
+                    newBookTitleInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+
+        // --- Gerenciamento de Empréstimos (Confirmar Retirada) ---
+        pendingLoansList.addEventListener('click', (event) => {
+            if (event.target.dataset.action === 'confirm-pickup') {
+                const loanIdToConfirm = event.target.dataset.loanId;
+                
+                let loans = loadLoans();
+                let books = loadBooks();
+
+                // Encontra o empréstimo a ser confirmado
+                const loanToConfirm = loans.find(loan => loan.id === loanIdToConfirm);
+
+                if (loanToConfirm) {
+                    // 1. Atualiza o status do empréstimo para 'borrowed'
+                    // 2. Define uma data de retorno (ex: 7 dias a partir de hoje)
+                    loans = loans.map(loan => {
+                        if (loan.id === loanIdToConfirm) {
+                            const returnDate = new Date();
+                            returnDate.setDate(returnDate.getDate() + 7); // Exemplo: 7 dias de empréstimo
+                            return { 
+                                ...loan, 
+                                status: 'borrowed', 
+                                returnDate: returnDate.toISOString() // Salva como ISO string
+                            };
+                        }
+                        return loan;
+                    });
+
+                    // 3. Atualiza o status do livro correspondente para 'borrowed'
+                    books = books.map(book => {
+                        if (book.id === loanToConfirm.bookId) {
+                            return { ...book, status: 'borrowed' };
+                        }
+                        return book;
+                    });
+
+                    saveLoans(loans); // Salva os empréstimos atualizados
+                    saveBooks(books); // Salva os livros atualizados
+
+                    renderBooks(); // Re-renderiza tudo para atualizar as listas
+                    alert('Retirada do livro confirmada com sucesso!');
+                }
+            }
+        });
+
+        // --- Lógica das Abas ---
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                button.classList.add('active');
+
+                const targetTab = button.dataset.tab; 
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+
+
+        // --- Evento de Carregamento da Página ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                adminArea.classList.add('show');
+                // Garante que a primeira aba esteja ativa ao carregar a área administrativa
+                document.querySelector('.tab-button').classList.add('active');
+                document.querySelector('.tab-content').classList.add('active');
+            }
+            renderBooks(); // CHAMA A FUNÇÃO AQUI para exibir os livros e empréstimos ao carregar!
+        });
+    </script>
+</body>
+</html>

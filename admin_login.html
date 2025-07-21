@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Biblioteca ETEC Darcy</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: #f5f5dc; /* Bege Claro/Areia */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .login-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        .login-container h2 {
+            color: #8B4513; /* Marrom Avelã */
+            margin-bottom: 25px;
+        }
+        .login-container input[type="email"],
+        .login-container input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .login-container button {
+            background-color: #add8e6; /* Azul Sereno */
+            color: #8B4513; /* Marrom Avelã */
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .login-container button:hover {
+            background-color: #9acde0; /* Azul Sereno mais escuro */
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login da Bibliotecária</h2>
+        <input type="email" id="adminEmail" placeholder="E-mail" required>
+        <input type="password" id="adminPassword" placeholder="Senha" required>
+        <button id="loginBtn">Entrar</button>
+        <p id="errorMessage" class="error-message">E-mail ou senha incorretos.</p>
+    </div>
+
+    <script>
+        const adminEmailInput = document.getElementById('adminEmail');
+        const adminPasswordInput = document.getElementById('adminPassword');
+        const loginBtn = document.getElementById('loginBtn');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Credenciais de teste
+        const TEST_EMAIL = "biblioteca@etecdarcy.com";
+        const TEST_PASSWORD = "senha123";
+
+        loginBtn.addEventListener('click', () => {
+            const email = adminEmailInput.value.trim();
+            const password = adminPasswordInput.value.trim();
+
+            if (email === TEST_EMAIL && password === TEST_PASSWORD) {
+                // Login bem-sucedido: Salva um indicador no LocalStorage e redireciona
+                localStorage.setItem('isLoggedIn', 'true');
+                window.location.href = 'index.html'; // Redireciona para a página principal
+            } else {
+                errorMessage.style.display = 'block'; // Mostra mensagem de erro
+            }
+        });
+    </script>
+</body>
+</html>
