@@ -5,263 +5,301 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca ETEC Darcy - Empréstimo de Livros</title>
     <style>
-        /* Estilos básicos para ver a estrutura - serão refinados no CSS */
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            background-color: #f5f5dc; /* Bege Claro/Areia */
-            color: #333;
-        }
-        header {
-            background-color: #add8e6; /* Azul Sereno */
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 1.8em;
-        }
-        .btn-login {
-            background-color: #8B4513; /* Marrom Avelã */
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .search-filter-section {
-            background-color: #b2dfdb; /* Verde Menta Suave */
-            padding: 20px;
-            text-align: center;
-            border-radius: 0 0 10px 10px;
-        }
-        .search-filter-section input[type="text"] {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 70%;
-            max-width: 400px;
-            margin-right: 10px;
-        }
-        .filter-buttons button {
-            background-color: #8B4513;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        .book-list-container {
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .book-card {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .book-card img {
-            max-width: 100px;
-            height: auto;
-            margin-bottom: 10px;
-        }
-        .book-card h3 {
-            margin-top: 0;
-            color: #add8e6; /* Azul Sereno */
-        }
-        .book-card p {
-            font-size: 0.9em;
-            color: #555;
-        }
-        .book-status {
-            font-weight: bold;
-            color: green; /* Será dinâmico via JS */
-            margin-bottom: 10px;
-        }
-        .btn-emprestar {
-            background-color: #b2dfdb; /* Verde Menta Suave */
-            color: #8B4513; /* Marrom Avelã */
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        footer {
-            background-color: #8B4513; /* Marrom Avelã */
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 30px;
-        }
+/* Estilos básicos para ver a estrutura - serão refinados no CSS */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #E0D8B0; /* Bege Mais Profundo */
+    color: #333;
+}
+header {
+    background-color: #C8D8BF; /* Verde Sálvia */
+    color: #333;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+.btn-login {
+    background-color: #8B4513; /* Marrom Avelã */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.search-filter-section {
+    background-color: #A0B99F; /* Verde Oliva Suave/Musgo */
+    padding: 20px;
+    text-align: center;
+    border-radius: 0 0 10px 10px;
+}
+.search-filter-section input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 70%;
+    max-width: 400px;
+    margin-right: 10px;
+}
+.filter-buttons button {
+    background-color: #8B4513;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+}
+.book-list-container {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+.book-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.book-card img {
+    max-width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+}
+.book-card h3 {
+    margin-top: 0;
+    color: #C8D8BF; /* Verde Sálvia */
+}
+.book-card p {
+    font-size: 0.9em;
+    color: #555;
+}
+.book-status {
+    font-weight: bold;
+    color: green; /* Será dinâmico via JS */
+    margin-bottom: 10px;
+}
+.btn-emprestar {
+    background-color: #A0B99F; /* Verde Oliva Suave/Musgo */
+    color: #8B4513; /* Marrom Avelã */
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+footer {
+    background-color: #A0B99F; /* Marrom Avelã */
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+}
 
-        /* Modal de Empréstimo */
-        .modal {
-            display: none; /* Escondido por padrão */
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal.show {
-            display: flex; /* Exibido quando a classe 'show' é adicionada */
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 10px;
-            text-align: center;
-            position: relative;
-        }
-        .close-button {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            cursor: pointer;
-        }
-        .close-button:hover,
-        .close-button:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .modal-content input[type="text"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .modal-content button {
-            background-color: #b2dfdb;
-            color: #8B4513;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
+/* Modal de Empréstimo */
+.modal {
+    display: none; /* Escondido por padrão */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+.modal.show {
+    display: flex; /* Exibido quando a classe 'show' é adicionada */
+}
+.modal-content {
+    background-color: #FCFBF7; /* Off-white suave - NOVO */
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+}
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.modal-content input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.modal-content button {
+    background-color: #A0B99F;
+    color: #8B4513;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
 
-        /* Área Administrativa (escondida inicialmente) */
-        .admin-area {
-            display: none; /* Será exibido via JS após login */
-            padding: 20px;
-            background-color: #f0f8ff; /* Um azul bem clarinho para diferenciar */
-            margin-top: 20px;
-            border-top: 2px solid #add8e6;
-        }
-        .admin-area.show {
-            display: block; /* Exibido quando a classe 'show' é adicionada */
-        }
-        .admin-area h2 {
-            color: #8B4513;
-        }
-        .admin-section {
-            background-color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .admin-section input, .admin-section select, .admin-section button {
-            padding: 8px;
-            margin: 5px 0;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        .admin-section button {
-            background-color: #add8e6;
-            color: #333;
-            cursor: pointer;
-            border: none;
-            margin-left: 10px;
-        }
-        .admin-section ul {
-            list-style: none;
-            padding: 0;
-        }
-        .admin-section li {
-            background-color: #e6f7ff;
-            margin-bottom: 5px;
-            padding: 10px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .admin-section li button {
-            background-color: #ff9999; /* Vermelho para remover/devolver */
-            color: white;
-            padding: 5px 10px;
-        }
-        .btn-logout { /* NOVO ESTILO AQUI */
-            background-color: #ff6347; /* Um tom de vermelho para "sair" */
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 20px; /* Espaçamento abaixo do botão */
-        }
-        .btn-logout:hover {
-            background-color: #e55337;
-        }
-        /* Estilos para as Abas da Área Administrativa - NOVO AQUI */
-        .tabs {
-            display: flex;
-            justify-content: center; /* Centraliza os botões das abas */
-            margin-top: 20px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #add8e6; /* Linha divisória abaixo das abas */
-        }
-        .tab-button {
-            background-color: #e0e0e0; /* Cinza claro para abas inativas */
-            color: #333;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px 8px 0 0; /* Bordas arredondadas no topo */
-            cursor: pointer;
-            margin: 0 5px; /* Espaço entre os botões */
-            transition: background-color 0.3s ease;
-        }
-        .tab-button.active {
-            background-color: #add8e6; /* Azul Sereno para aba ativa */
-            color: white;
-            font-weight: bold;
-        }
-        .tab-button:hover:not(.active) {
-            background-color: #d0d0d0; /* Escurece um pouco ao passar o mouse */
-        }
-        .tab-content {
-            display: none; /* Esconde o conteúdo das abas por padrão */
-            padding-top: 20px; /* Espaçamento entre as abas e o conteúdo */
-        }
-        .tab-content.active {
-            display: block; /* Exibe o conteúdo da aba ativa */
-        }
+/* Área Administrativa */
+.admin-area {
+    display: none; /* Será exibido via JS após login */
+    padding: 20px;
+    background-color: #E6EFF2; /* Cinza-azulado muito suave */
+    margin-top: 20px;
+    border-top: 2px solid #C8D8BF;
+}
+.admin-area.show {
+    display: block; /* Exibido quando a classe 'show' é adicionada */
+}
+.admin-area h2 {
+    color: #8B4513;
+}
+.admin-section {
+    background-color: #FCFBF7; /* Off-white suave - NOVO */
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.admin-section input, .admin-section select, .admin-section button {
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.admin-section button {
+    background-color: #C8D8BF;
+    color: #333;
+    cursor: pointer;
+    border: none;
+    margin-left: 10px;
+}
+.admin-section ul {
+    list-style: none;
+    padding: 0;
+}
+.admin-section li {
+    background-color: #F0F4F5; /* Cinza-azulado mais claro para itens de lista */
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.admin-section li button {
+    background-color: #ff9999; /* Vermelho para remover/devolver */
+    color: white;
+    padding: 5px 10px;
+}
+.btn-logout {
+    background-color: #ff6347; /* Um tom de vermelho para "sair" */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+.btn-logout:hover {
+    background-color: #e55337;
+}
+/* Estilos para as Abas da Área Administrativa */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #C8D8BF;
+}
+.tab-button {
+    background-color: #e0e0e0; /* Cinza claro para abas inativas */
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+}
+.tab-button.active {
+    background-color: #C8D8BF;
+    color: #333;
+    font-weight: bold;
+}
+.tab-button:hover:not(.active) {
+    background-color: #d0d0d0;
+}
+.tab-content {
+    display: none;
+    padding-top: 20px;
+}
+.tab-content.active {
+    display: block;
+}
+/* Estilos adicionais para a nova seção de confirmação de retirada */
+.loan-actions .action-button {
+    background-color: #4CAF50; /* Verde para confirmar */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+.loan-actions .action-button[data-action="cancel-pickup"] {
+    background-color: #dc3545; /* Vermelho para cancelar */
+    margin-left: 10px;
+}
+/* Estilo para os botões de filtro */
+.filter-buttons button {
+    background-color: #f0f0f0; /* Cor de fundo padrão */
+    color: #333; /* Cor do texto padrão */
+    border: 1px solid #ccc;
+    padding: 8px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    font-size: 0.9em;
+}
+
+.filter-buttons button:hover {
+    background-color: #e0e0e0; /* Um pouco mais escuro ao passar o mouse */
+}
+
+/* NOVO: Estilo para o botão de filtro ATIVO */
+.filter-buttons button.active {
+    background-color: #007bff; /* Cor principal, um azul vibrante */
+    color: white; /* Texto branco para contraste */
+    border-color: #007bff;
+    font-weight: bold; /* Opcional: deixar o texto em negrito */
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3); /* Sombra sutil para destaque */
+}
     </style>
 </head>
 <body>
@@ -274,11 +312,17 @@
         <section class="search-filter-section">
             <input type="text" id="searchInput" placeholder="Pesquisar por título, autor, etc.">
             <div class="filter-buttons">
-                <button data-filter="all">Todos</button>
-                <button data-filter="available">Disponíveis</button>
-                <button data-filter="fiction">Ficção</button>
-                <button data-filter="nonfiction">Não Ficção</button>
-                </div>
+    <button data-filter="all">Todos</button>
+    <button data-filter="available">Disponíveis</button>
+    <button data-filter="Ficção">Ficção</button>
+    <button data-filter="Fantasia">Fantasia</button>
+    <button data-filter="Ficção Científica">Ficção Científica</button>
+    <button data-filter="Mistério">Mistério</button>
+    <button data-filter="Romance">Romance</button>
+    <button data-filter="Biografia">Biografia</button>
+    <button data-filter="História">História</button>
+    <button data-filter="Outros">Outros</button>
+</div>
         </section>
 
         <section class="book-list-container" id="bookList">
@@ -299,6 +343,7 @@
             <div class="book-card" data-book-id="3" data-book-title="1984" data-book-author="George Orwell" data-book-genre="Ficção" data-book-status="available">
                 <img src="https://via.placeholder.com/100x150?text=Capa+Livro+3" alt="Capa do Livro 3">
                 <h3>1984</h3>
+                <p>Autor: George Orwell</p>
                 <p>Autor: George Orwell</p>
                 <p class="book-status">Disponível</p>
                 <button class="btn-emprestar">Emprestar</button>
@@ -333,8 +378,36 @@
                     <h4>Adicionar Novo Livro</h4>
                     <input type="text" id="newBookTitle" placeholder="Título do Livro" required>
                     <input type="text" id="newBookAuthor" placeholder="Autor" required>
-                    <input type="text" id="newBookGenre" placeholder="Gênero" required>
+                    
+                    <div class="genre-selection">
+                        <label>Gêneros:</label>
+                        <div class="genre-options">
+                            <input type="checkbox" id="genreFiction" name="bookGenre" value="Ficção">
+                            <label for="genreFiction">Ficção</label>
+                            
+                            <input type="checkbox" id="genreFantasy" name="bookGenre" value="Fantasia">
+                            <label for="genreFantasy">Fantasia</label>
+                            
+                            <input type="checkbox" id="genreScifi" name="bookGenre" value="Ficção Científica">
+                            <label for="genreScifi">Ficção Científica</label>
+                            
+                            <input type="checkbox" id="genreMystery" name="bookGenre" value="Mistério">
+                            <label for="genreMystery">Mistério</label>
+                            
+                            <input type="checkbox" id="genreRomance" name="bookGenre" value="Romance">
+                            <label for="genreRomance">Romance</label>
+                            
+                            <input type="checkbox" id="genreBiography" name="bookGenre" value="Biografia">
+                            <label for="genreBiography">Biografia</label>
+                            
+                            <input type="checkbox" id="genreHistory" name="bookGenre" value="História">
+                            <label for="genreHistory">História</label>
 
+                            <input type="checkbox" id="genreOthers" name="bookGenre" value="Outros">
+                            <label for="genreOthers">Outros</label>
+                            
+                            </div>
+                    </div>
                     <label for="newBookCoverURL">URL da Imagem de Capa (Opcional):</label>
                     <input type="text" id="newBookCoverURL" placeholder="Cole a URL da imagem aqui">
 
@@ -352,9 +425,17 @@
             <div id="manageLoans" class="tab-content">
                 <div class="admin-section">
                     <h3>Gerenciar Empréstimos</h3>
+                    
+                    <div class="loan-actions" style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;">
+                        <h4>Confirmar Retirada de Livro por Código</h4>
+                        <p>O aluno deve informar o código de retirada gerado.</p>
+                        <input type="text" id="loanCodeInput" placeholder="Digite o código de retirada" style="padding: 8px; margin-right: 10px; border-radius: 4px; border: 1px solid #ddd; width: 200px; text-transform: uppercase;">
+                        <button id="searchLoanCodeBtn" class="action-button" style="background-color: #4CAF50; color: white; padding: 10px 15px; border-radius: 5px; border: none; cursor: pointer;">Confirmar Retirada</button>
+                        <div id="loanConfirmationResult" style="margin-top: 10px; padding: 10px; border: 1px dashed #eee; display: none; background-color: #e9ffe9; border-radius: 5px;"></div>
+                    </div>
                     <h4>Solicitações Pendentes</h4>
                     <ul id="pendingLoansList">
-                        <li>Aluno: [Nome], Turma: [Turma], Livro: [Título] - Código: [CODIGO] <button data-action="confirm-pickup" data-loan-code="CODIGO">Confirmar Retirada</button></li>
+                        <li>Aluno: [Nome], Turma: [Turma], Livro: [Título] - Código: [CODIGO]</li>
                     </ul>
 
                     <h4>Registrar Devolução</h4>
@@ -371,470 +452,785 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 Biblioteca ETEC Darcy - Todos os direitos reservados.</p>
-        <p>Horário de Funcionamento: Segunda a Sexta, das 8h às 17h.</p>
-        <p>Contato: (XX) XXXX-XXXX | biblioteca.darcy@etec.sp.gov.br</p>
+        <p>Feito com ❤️ por Aura</p>
     </footer>
+</body>
+</html>
 
-   <script>
-        // --- Variáveis Globais e Seletores de Elementos ---
-        const loanModal = document.getElementById('loanModal');
-        const closeButton = document.querySelector('.close-button');
-        const confirmLoanBtn = document.getElementById('confirmLoanBtn');
-        const modalBookTitle = document.getElementById('modalBookTitle');
-        const studentNameInput = document.getElementById('studentName');
-        const studentClassInput = document.getElementById('studentClass');
-        const loanCodeDisplay = document.getElementById('loanCodeDisplay');
-        const adminLoginBtn = document.getElementById('adminLoginBtn');
-        const adminArea = document.getElementById('adminArea');
-        const adminLogoutBtn = document.getElementById('adminLogoutBtn'); 
+ <script>
+    // --- Variáveis Globais e Seletores de Elementos ---
+    const loanModal = document.getElementById('loanModal');
+    const closeButton = document.querySelector('.close-button');
+    const confirmLoanBtn = document.getElementById('confirmLoanBtn');
+    const modalBookTitle = document.getElementById('modalBookTitle');
+    const studentNameInput = document.getElementById('studentName');
+    const studentClassInput = document.getElementById('studentClass');
+    const loanCodeDisplay = document.getElementById('loanCodeDisplay');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminArea = document.getElementById('adminArea');
+    const adminLogoutBtn = document.getElementById('adminLogoutBtn');
 
-        // NOVAS VARIÁVEIS PARA GERENCIAMENTO DE EMPRÉSTIMOS
-        const pendingLoansList = document.getElementById('pendingLoansList'); // Lista de solicitações pendentes
-        const currentLoansList = document.getElementById('currentLoansList'); // Lista de livros emprestados atualmente
+    // NOVAS VARIÁVEIS PARA GERENCIAMENTO DE EMPRÉSTIMOS
+    const pendingLoansList = document.getElementById('pendingLoansList'); // Lista de solicitações pendentes
+    const currentLoansList = document.getElementById('currentLoansList'); // Lista de livros emprestados atualmente
 
-        // NOVAS VARIÁVEIS PARA GERENCIAMENTO DE LIVROS
-        const newBookTitleInput = document.getElementById('newBookTitle');
-        const newBookAuthorInput = document.getElementById('newBookAuthor');
-        const newBookGenreInput = document.getElementById('newBookGenre');
-        const newBookCoverURLInput = document.getElementById('newBookCoverURL'); // Campo de URL
-        const newBookCoverFileInput = document.getElementById('newBookCoverFile'); // Campo de arquivo
-        const addBookBtn = document.getElementById('addBookBtn');
-        const currentBooksList = document.getElementById('currentBooksList'); // Lista da área admin
-        const bookListContainer = document.getElementById('bookList'); // Lista principal de livros
-        
-        // NOVAS VARIÁVEIS PARA AS ABAS
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
+    // NOVAS VARIÁVEIS PARA A CONFIRMAÇÃO POR CÓDIGO (ADICIONADAS AQUI)
+    const loanCodeInput = document.getElementById('loanCodeInput');
+    const searchLoanCodeBtn = document.getElementById('searchLoanCodeBtn');
+    const loanConfirmationResult = document.getElementById('loanConfirmationResult');
 
-        let currentBookId = null; 
-        let editingBookId = null; 
-        
-        // --- Funções de Gerenciamento de Dados (Livros) ---
+    // VARIÁVEIS PARA GERENCIAMENTO DE LIVROS (DO FORMULÁRIO PRINCIPAL ATUALMENTE)
+    // ATENÇÃO: QUANDO O MODAL FOR IMPLEMENTADO, ESTAS VARIÁVEIS DEVERÃO SER ATUALIZADAS PARA OS IDS DO MODAL
+    const newBookTitleInput = document.getElementById('newBookTitle');
+    const newBookAuthorInput = document.getElementById('newBookAuthor');
+    // newBookGenreInput não é mais um input de texto, é um grupo de checkboxes.
+    // Vamos coletar os gêneros dos checkboxes diretamente na função addBookBtn.
+    const newBookCoverURLInput = document.getElementById('newBookCoverURL'); // Campo de URL
+    const newBookCoverFileInput = document.getElementById('newBookCoverFile'); // Campo de arquivo
+    const addBookBtn = document.getElementById('addBookBtn'); // Botão de adicionar livro
+    const currentBooksList = document.getElementById('currentBooksList'); // Lista da área admin
+    const bookListContainer = document.getElementById('bookList'); // Lista principal de livros
 
-        // Função para carregar livros do localStorage
-        function loadBooks() {
-            const books = JSON.parse(localStorage.getItem('books')) || [];
-            return books;
+    // NOVAS VARIÁVEIS PARA AS ABAS
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    // VARIÁVEIS PARA FILTROS DE PESQUISA
+    const searchInput = document.getElementById('searchInput'); // Já existe
+    const filterButtons = document.querySelectorAll('.filter-buttons button'); // Seleciona todos os botões de filtro
+
+    let currentBookId = null; // Usado para empréstimo
+    let editingBookId = null; // Usado para edição de livro
+
+    // Variável para armazenar o filtro de gênero ativo
+    let activeGenreFilter = 'all'; // 'all', 'available', 'Ficção', 'Fantasia', etc.
+
+    // --- Funções de Gerenciamento de Dados (Livros) ---
+
+    // Função para carregar livros do localStorage
+    function loadBooks() {
+        const books = JSON.parse(localStorage.getItem('books')) || [];
+        return books;
+    }
+
+    // Função para salvar livros no localStorage
+    function saveBooks(books) {
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+
+    // Função para gerar um ID único para cada livro (muito importante!)
+    function generateUniqueId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    // --- Funções de Gerenciamento de Dados (Empréstimos) ---
+
+    // Função para carregar empréstimos do localStorage
+    function loadLoans() {
+        const loans = JSON.parse(localStorage.getItem('loans')) || [];
+        return loans;
+    }
+
+    // Função para salvar empréstimos no localStorage
+    function saveLoans(loans) {
+        localStorage.setItem('loans', JSON.stringify(loans));
+    }
+
+    // --- Funções para Renderizar Livros na UI ---
+
+    // Função para exibir os livros nas duas listas E aplicar filtros
+    function renderBooks() {
+        const books = loadBooks(); // Carrega os livros do localStorage
+
+        // Limpa as listas antes de renderizar
+        currentBooksList.innerHTML = '';
+        bookListContainer.innerHTML = '';
+
+        if (books.length === 0) {
+            currentBooksList.innerHTML = '<li>Nenhum livro cadastrado.</li>';
+            bookListContainer.innerHTML = '<p style="text-align: center; margin-top: 50px;">Nenhum livro disponível na biblioteca no momento.</p>';
+            // Remove os event listeners de emprestimo se não houver livros
+            document.querySelectorAll('.btn-emprestar').forEach(button => {
+                const oldListener = button._eventListener;
+                if (oldListener) {
+                    button.removeEventListener('click', oldListener);
+                }
+            });
+            return;
         }
 
-        // Função para salvar livros no localStorage
-        function saveBooks(books) {
-            localStorage.setItem('books', JSON.stringify(books));
-        }
+        // --- FILTRAGEM E RENDERIZAÇÃO NA LISTA PRINCIPAL (PARA ALUNOS) ---
+        const filteredBooks = applyFilters(books); // Aplica os filtros
 
-        // Função para gerar um ID único para cada livro (muito importante!)
-        function generateUniqueId() {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2);
-        }
-
-        // --- Funções de Gerenciamento de Dados (Empréstimos) ---
-
-        // Função para carregar empréstimos do localStorage
-        function loadLoans() {
-            const loans = JSON.parse(localStorage.getItem('loans')) || [];
-            return loans;
-        }
-
-        // Função para salvar empréstimos no localStorage
-        function saveLoans(loans) {
-            localStorage.setItem('loans', JSON.stringify(loans));
-        }
-
-        // --- Funções para Renderizar Livros na UI ---
-
-        // Função para exibir os livros nas duas listas
-        function renderBooks() {
-            const books = loadBooks(); // Carrega os livros do localStorage
-
-            // Limpa as listas antes de renderizar
-            currentBooksList.innerHTML = '';
-            bookListContainer.innerHTML = '';
-
-            if (books.length === 0) {
-                currentBooksList.innerHTML = '<li>Nenhum livro cadastrado.</li>';
-                bookListContainer.innerHTML = '<p style="text-align: center; margin-top: 50px;">Nenhum livro disponível na biblioteca no momento.</p>';
-                // Remove os event listeners de emprestimo se não houver livros
-                document.querySelectorAll('.btn-emprestar').forEach(button => {
-                    // Remove listener anterior para evitar duplicações se renderBooks for chamada múltiplas vezes
-                    const oldListener = button._eventListener; 
-                    if (oldListener) {
-                        button.removeEventListener('click', oldListener);
-                    }
-                });
-                return;
-            }
-
-            // Renderiza na lista principal (para alunos)
-            books.forEach(book => {
+        if (filteredBooks.length === 0) {
+            bookListContainer.innerHTML = '<p style="text-align: center; margin-top: 50px;">Nenhum livro encontrado com os filtros selecionados.</p>';
+        } else {
+            filteredBooks.forEach(book => {
                 const bookCard = `
                     <div class="book-card" data-book-id="${book.id}" data-book-title="${book.title}" data-book-author="${book.author}" data-book-genre="${book.genre}" data-book-status="${book.status}">
                         <img src="${book.cover || 'https://via.placeholder.com/100x150?text=Sem+Capa'}" alt="Capa do Livro: ${book.title}">
                         <h3>${book.title}</h3>
                         <p>Autor: ${book.author}</p>
-                        <p class="book-status">${book.status === 'available' ? 'Disponível' : `Emprestado - Retorno: ${book.returnDate ? new Date(book.returnDate).toLocaleDateString() : 'N/A'}`}</p>
+                        <p class="book-status">${book.status === 'available' ? 'Disponível' : `Emprestado - Retorno: ${book.returnDate ? new Date(book.returnDate).toLocaleDateString('pt-BR') : 'N/A'}`}</p>
                         <button class="btn-emprestar" ${book.status !== 'available' ? 'disabled' : ''}>Emprestar</button>
                     </div>
                 `;
                 bookListContainer.insertAdjacentHTML('beforeend', bookCard);
             });
-
-            // Re-adiciona os event listeners para os botões de empréstimo (já que limpamos e recriamos)
-            document.querySelectorAll('.btn-emprestar').forEach(button => {
-                // Remove listener anterior para evitar duplicações se renderBooks for chamada múltiplas vezes
-                const oldListener = button._eventListener; 
-                if (oldListener) {
-                    button.removeEventListener('click', oldListener);
-                }
-                const newListener = (event) => {
-                    const bookCard = event.target.closest('.book-card');
-                    const bookTitle = bookCard.querySelector('h3').textContent;
-                    const bookId = bookCard.dataset.bookId;
-                    openLoanModal(bookTitle, bookId);
-                };
-                button.addEventListener('click', newListener);
-                button._eventListener = newListener; // Guarda a referência do novo listener
-            });
-
-
-            // Renderiza na lista da área administrativa (para bibliotecária)
-            books.forEach(book => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    ${book.title} (${book.author}) - Status: ${book.status === 'available' ? 'Disponível' : 'Emprestado'}
-                    <button data-action="delete" data-book-id="${book.id}">Excluir</button> 
-                    <button data-action="edit" data-book-id="${book.id}">Editar</button>
-                `;
-                currentBooksList.appendChild(li);
-            });
-
-            // Atualiza também os empréstimos
-            renderLoans(); 
         }
-
-        // --- Funções para Renderizar Empréstimos na UI (Área Administrativa) ---
-
-        function renderLoans() {
-            const loans = loadLoans(); // Carrega todos os empréstimos
-
-            // Limpa as listas antes de preenchê-las
-            pendingLoansList.innerHTML = '';
-            currentLoansList.innerHTML = '';
-
-            const books = loadBooks(); // Precisamos dos dados dos livros para pegar o título etc.
-
-            if (loans.length === 0) {
-                pendingLoansList.innerHTML = '<li>Nenhuma solicitação pendente.</li>';
-                currentLoansList.innerHTML = '<li>Nenhum livro emprestado no momento.</li>';
-                return;
+        
+        // Re-adiciona os event listeners para os botões de empréstimo (já que limpamos e recriamos)
+        document.querySelectorAll('.btn-emprestar').forEach(button => {
+            const oldListener = button._eventListener;
+            if (oldListener) {
+                button.removeEventListener('click', oldListener);
             }
-
-            // Separa empréstimos pendentes de ativos
-            const pending = loans.filter(loan => loan.status === 'pending');
-            const active = loans.filter(loan => loan.status === 'borrowed');
-
-            // Renderiza Solicitações Pendentes
-            if (pending.length === 0) {
-                pendingLoansList.innerHTML = '<li>Nenhuma solicitação pendente.</li>';
-            } else {
-                pending.forEach(loan => {
-                    const book = books.find(b => b.id === loan.bookId);
-                    if (book) {
-                        const li = document.createElement('li');
-                        li.innerHTML = `
-                            Aluno: ${loan.studentName}, Turma: ${loan.studentClass}, Livro: ${book.title} - Código: ${loan.loanCode} 
-                            <button data-action="confirm-pickup" data-loan-id="${loan.id}">Confirmar Retirada</button>
-                        `;
-                        pendingLoansList.appendChild(li);
-                    }
-                });
-            }
-
-            // Renderiza Livros Emprestados Atualmente
-            if (active.length === 0) {
-                currentLoansList.innerHTML = '<li>Nenhum livro emprestado no momento.</li>';
-            } else {
-                active.forEach(loan => {
-                    const book = books.find(b => b.id === loan.bookId);
-                    if (book) {
-                        const li = document.createElement('li');
-                        li.innerHTML = `
-                            Livro: ${book.title}, Aluno: ${loan.studentName}, Turma: ${loan.studentClass} - 
-                            <button data-action="mark-returned" data-loan-id="${loan.id}">Marcar Devolvido</button>
-                        `;
-                        currentLoansList.appendChild(li);
-                    }
-                });
-            }
-
-            // TODO: Event listeners para 'Confirmar Retirada' e 'Marcar Devolvido' serão adicionados em um próximo passo
-        }
-
-
-        // --- Funções para o Modal de Empréstimo ---
-        function openLoanModal(bookTitle, bookId) {
-            modalBookTitle.textContent = bookTitle;
-            currentBookId = bookId; 
-            
-            loanCodeDisplay.style.display = 'none'; 
-            loanCodeDisplay.textContent = ''; 
-            studentNameInput.value = ''; 
-            studentClassInput.value = ''; 
-            confirmLoanBtn.disabled = false; 
-
-            loanModal.classList.add('show');
-        }
-
-        function closeLoanModal() {
-            loanModal.classList.remove('show');
-        }
-
-        // --- Event Listeners para o Modal de Empréstimo ---
-        // O event listener para .btn-emprestar é adicionado dentro de renderBooks().
-
-        closeButton.addEventListener('click', closeLoanModal);
-
-        window.addEventListener('click', (event) => {
-            if (event.target === loanModal) {
-                closeLoanModal();
-            }
-        });
-
-        confirmLoanBtn.addEventListener('click', () => {
-            const studentName = studentNameInput.value.trim();
-            const studentClass = studentClassInput.value.trim();
-
-            if (studentName === '' || studentClass === '') {
-                alert('Por favor, preencha seu nome e turma para prosseguir.');
-                return;
-            }
-
-            const loanCode = `ETEC-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
-            
-            // Cria o objeto de empréstimo
-            const newLoan = {
-                id: generateUniqueId(), // ID único para o empréstimo
-                bookId: currentBookId, // ID do livro que está sendo emprestado
-                studentName: studentName,
-                studentClass: studentClass,
-                loanCode: loanCode,
-                loanDate: new Date().toISOString(), // Data atual do empréstimo (ISO para fácil conversão)
-                returnDate: null, // Ainda não devolvido
-                status: 'pending' // Status inicial: pendente de confirmação
+            const newListener = (event) => {
+                const bookCard = event.target.closest('.book-card');
+                const bookTitle = bookCard.querySelector('h3').textContent;
+                const bookId = bookCard.dataset.bookId;
+                openLoanModal(bookTitle, bookId);
             };
-
-            const loans = loadLoans(); // Carrega empréstimos existentes
-            loans.push(newLoan); // Adiciona o novo empréstimo
-            saveLoans(loans); // Salva a lista atualizada
-
-            loanCodeDisplay.textContent = `Seu código de retirada: ${loanCode}`;
-            loanCodeDisplay.style.display = 'block';
-
-            confirmLoanBtn.disabled = true;
-
-            // Atualiza a área administrativa para exibir a nova solicitação
-            // renderBooks já chama renderLoans, então é suficiente para atualizar tudo
-            renderBooks(); 
+            button.addEventListener('click', newListener);
+            button._eventListener = newListener; // Guarda a referência do novo listener
         });
 
-        // --- Gerenciamento da Área Administrativa (Login/Logout) ---
 
-        adminLoginBtn.addEventListener('click', () => {
-            window.location.href = 'admin_login.html';
+        // --- RENDERIZAÇÃO NA LISTA DA ÁREA ADMINISTRATIVA (para bibliotecária) ---
+        // A lista admin sempre mostra todos os livros, independentemente dos filtros de pesquisa pública
+        books.forEach(book => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                ${book.title} (${book.author}) - Status: ${book.status === 'available' ? 'Disponível' : 'Emprestado'}
+                <button data-action="delete" data-book-id="${book.id}">Excluir</button>
+                <button data-action="edit" data-book-id="${book.id}">Editar</button>
+            `;
+            currentBooksList.appendChild(li);
         });
 
-        adminLogoutBtn.addEventListener('click', () => { 
-            localStorage.removeItem('isLoggedIn');
-            adminArea.classList.remove('show');
-            alert("Você saiu da área administrativa.");
+        // Atualiza também os empréstimos
+        renderLoans();
+    }
+
+    // --- NOVA FUNÇÃO: Aplicar Filtros ---
+    function applyFilters(books) {
+        let filteredBooks = [...books]; // Cria uma cópia para não modificar o array original
+
+        // 1. Filtro de Pesquisa por texto (searchInput)
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        if (searchTerm) {
+            filteredBooks = filteredBooks.filter(book =>
+                book.title.toLowerCase().includes(searchTerm) ||
+                book.author.toLowerCase().includes(searchTerm)
+            );
+        }
+
+        // 2. Filtro por botões (status/gênero)
+        if (activeGenreFilter === 'available') {
+            filteredBooks = filteredBooks.filter(book => book.status === 'available');
+        } else if (activeGenreFilter !== 'all') { // Se não for 'all' nem 'available', é um gênero
+            filteredBooks = filteredBooks.filter(book => {
+                // Supondo que book.genre pode ser um array ou string (se for só um gênero)
+                // Se for um array de gêneros (ideal para múltiplos), use .includes()
+                // Se for uma string simples, compare diretamente
+                if (Array.isArray(book.genre)) {
+                    return book.genre.includes(activeGenreFilter);
+                } else {
+                    return book.genre === activeGenreFilter;
+                }
+            });
+        }
+
+        return filteredBooks;
+    }
+
+
+    // --- Funções para Renderizar Empréstimos na UI (Área Administrativa) ---
+
+    function renderLoans() {
+        const loans = loadLoans(); // Carrega todos os empréstimos
+
+        // Limpa as listas antes de preenchê-las
+        pendingLoansList.innerHTML = '';
+        currentLoansList.innerHTML = '';
+        loanConfirmationResult.style.display = 'none'; // Esconde o resultado da confirmação por código
+
+        const books = loadBooks(); // Precisamos dos dados dos livros para pegar o título etc.
+
+        if (loans.length === 0) {
+            pendingLoansList.innerHTML = '<li>Nenhuma solicitação pendente.</li>';
+            currentLoansList.innerHTML = '<li>Nenhum livro emprestado no momento.</li>';
+            return;
+        }
+
+        // Separa empréstimos pendentes de ativos
+        const pending = loans.filter(loan => loan.status === 'pending');
+        const active = loans.filter(loan => loan.status === 'borrowed');
+
+        // Renderiza Solicitações Pendentes
+        if (pending.length === 0) {
+            pendingLoansList.innerHTML = '<li>Nenhuma solicitação pendente.</li>';
+        } else {
+            pending.forEach(loan => {
+                const book = books.find(b => b.id === loan.bookId);
+                if (book) {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        Aluno: ${loan.studentName}, Turma: ${loan.studentClass}, Livro: ${book.title} - Código: <strong>${loan.loanCode}</strong>
+                    `;
+                    pendingLoansList.appendChild(li);
+                }
+            });
+        }
+
+        // Renderiza Livros Emprestados Atualmente
+        if (active.length === 0) {
+            currentLoansList.innerHTML = '<li>Nenhum livro emprestado no momento.</li>';
+        } else {
+            active.forEach(loan => {
+                const book = books.find(b => b.id === loan.bookId);
+                if (book) {
+                    const li = document.createElement('li');
+                    const returnDateDisplay = loan.returnDate ? new Date(loan.returnDate).toLocaleDateString('pt-BR') : 'N/A';
+                    li.innerHTML = `
+                        Livro: ${book.title}, Aluno: ${loan.studentName}, Turma: ${loan.studentClass} - Retorno Previsto: ${returnDateDisplay}
+                        <button data-action="mark-returned" data-loan-id="${loan.id}">Marcar Devolvido</button>
+                    `;
+                    currentLoansList.appendChild(li);
+                }
+            });
+        }
+    }
+
+
+    // --- Funções para o Modal de Empréstimo ---
+    function openLoanModal(bookTitle, bookId) {
+        modalBookTitle.textContent = bookTitle;
+        currentBookId = bookId;
+
+        loanCodeDisplay.style.display = 'none';
+        loanCodeDisplay.textContent = '';
+        studentNameInput.value = '';
+        studentClassInput.value = '';
+        confirmLoanBtn.disabled = false;
+
+        loanModal.classList.add('show');
+    }
+
+    function closeLoanModal() {
+        loanModal.classList.remove('show');
+    }
+
+    // --- Event Listeners para o Modal de Empréstimo ---
+    closeButton.addEventListener('click', closeLoanModal);
+
+    window.addEventListener('click', (event) => {
+        if (event.target === loanModal) {
+            closeLoanModal();
+        }
+    });
+
+    confirmLoanBtn.addEventListener('click', () => {
+        const studentName = studentNameInput.value.trim();
+        const studentClass = studentClassInput.value.trim();
+
+        if (studentName === '' || studentClass === '') {
+            alert('Por favor, preencha seu nome e turma para prosseguir.');
+            return;
+        }
+
+        const loanCode = `ETEC-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+
+        const newLoan = {
+            id: generateUniqueId(),
+            bookId: currentBookId,
+            studentName: studentName,
+            studentClass: studentClass,
+            loanCode: loanCode,
+            loanDate: new Date().toISOString(),
+            pickupDate: null,
+            returnDate: null,
+            status: 'pending'
+        };
+
+        const loans = loadLoans();
+        loans.push(newLoan);
+        saveLoans(loans);
+
+        loanCodeDisplay.innerHTML = `Seu código de retirada: <br><strong>${loanCode}</strong><br>Anote este código para apresentar na secretaria.`;
+        loanCodeDisplay.style.display = 'block';
+
+        renderBooks();
+    });
+
+    // --- Gerenciamento da Área Administrativa (Login/Logout) ---
+
+    adminLoginBtn.addEventListener('click', () => {
+        window.location.href = 'admin_login.html';
+    });
+
+    adminLogoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('isLoggedIn');
+        adminArea.classList.remove('show');
+        alert("Você saiu da área administrativa.");
+    });
+
+    // --- Gerenciamento de Livros na Área Administrativa (Adicionar/Editar Livro) ---
+
+    addBookBtn.addEventListener('click', async () => {
+        const title = newBookTitleInput.value.trim();
+        const author = newBookAuthorInput.value.trim();
+        // Coleta os gêneros dos checkboxes
+        const selectedGenres = Array.from(document.querySelectorAll('.genre-options input[type="checkbox"]:checked'))
+                                    .map(checkbox => checkbox.value);
+
+        if (selectedGenres.length === 0) {
+            alert('Por favor, selecione pelo menos um gênero para o livro.');
+            return;
+        }
+        
+        // Se a estrutura book.genre for para múltiplos, mantenha como array.
+        // Se for para um único gênero principal, você precisaria de uma lógica diferente aqui.
+        // Por enquanto, vamos manter book.genre como o primeiro gênero selecionado ou o array se houver mais de um.
+        const genre = selectedGenres.length > 1 ? selectedGenres : selectedGenres[0]; // Se for só um, salve como string, senão como array
+
+
+        const coverURL = newBookCoverURLInput.value.trim();
+        const coverFile = newBookCoverFileInput.files[0];
+
+        if (!title || !author) { // Ajustado para remover o requisito de gênero aqui, já que a validação é acima
+            alert('Por favor, preencha Título e Autor do livro.');
+            return;
+        }
+
+        let bookCover = coverURL;
+
+        if (!bookCover && coverFile) {
+            const reader = new FileReader();
+            reader.readAsDataURL(coverFile);
+
+            await new Promise((resolve) => {
+                reader.onload = () => {
+                    bookCover = reader.result;
+                    resolve();
+                };
+                reader.onerror = () => {
+                    console.error("Erro ao ler o arquivo de imagem.");
+                    alert("Não foi possível ler o arquivo de imagem. Tente uma URL ou outro arquivo.");
+                    bookCover = '';
+                    resolve();
+                };
+            });
+        }
+
+        let books = loadBooks();
+        let message = '';
+
+        if (editingBookId) {
+            books = books.map(book => {
+                if (book.id === editingBookId) {
+                    return {
+                        ...book,
+                        title: title,
+                        author: author,
+                        genre: genre, // Atualizado para o novo formato de gênero
+                        cover: bookCover || 'https://via.placeholder.com/100x150?text=Sem+Capa'
+                    };
+                }
+                return book;
+            });
+            message = 'Livro atualizado com sucesso!';
+            editingBookId = null;
+            addBookBtn.textContent = 'Adicionar Livro';
+        } else {
+            const newBook = {
+                id: generateUniqueId(),
+                title: title,
+                author: author,
+                genre: genre, // Atualizado para o novo formato de gênero
+                cover: bookCover || 'https://via.placeholder.com/100x150?text=Sem+Capa',
+                status: 'available',
+                returnDate: null
+            };
+            books.push(newBook);
+            message = 'Livro adicionado com sucesso!';
+        }
+
+        saveBooks(books);
+        renderBooks();
+
+        // Limpa os campos do formulário
+        newBookTitleInput.value = '';
+        newBookAuthorInput.value = '';
+        newBookCoverURLInput.value = '';
+        newBookCoverFileInput.value = '';
+        // Desmarca todos os checkboxes de gênero
+        document.querySelectorAll('.genre-options input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
         });
+        alert(message);
+    });
 
-        // --- Gerenciamento de Livros na Área Administrativa (Adicionar/Editar Livro) ---
+    // --- Gerenciamento de Livros (Excluir/Editar) ---
+    currentBooksList.addEventListener('click', (event) => {
+        // Lógica de EXCLUIR
+        if (event.target.dataset.action === 'delete') {
+            const bookIdToDelete = event.target.dataset.bookId;
 
-        addBookBtn.addEventListener('click', async () => { 
-            const title = newBookTitleInput.value.trim();
-            const author = newBookAuthorInput.value.trim();
-            const genre = newBookGenreInput.value.trim();
-            const coverURL = newBookCoverURLInput.value.trim();
-            const coverFile = newBookCoverFileInput.files[0]; 
-
-            if (!title || !author || !genre) {
-                alert('Por favor, preencha Título, Autor e Gênero do livro.');
-                return;
+            if (confirm('Tem certeza que deseja excluir este livro do catálogo?')) {
+                let books = loadBooks();
+                books = books.filter(book => book.id !== bookIdToDelete);
+                saveBooks(books);
+                renderBooks();
+                alert('Livro excluído com sucesso!');
             }
+        }
+        // Lógica para EDITAR
+        else if (event.target.dataset.action === 'edit') {
+            const bookIdToEdit = event.target.dataset.bookId;
+            const books = loadBooks();
+            const bookToEdit = books.find(book => book.id === bookIdToEdit);
 
-            let bookCover = coverURL; 
+            if (bookToEdit) {
+                newBookTitleInput.value = bookToEdit.title;
+                newBookAuthorInput.value = bookToEdit.author;
+                newBookCoverURLInput.value = bookToEdit.cover && !bookToEdit.cover.startsWith('data:image') ? bookToEdit.cover : '';
+                newBookCoverFileInput.value = '';
 
-            if (!bookCover && coverFile) {
-                const reader = new FileReader();
-                reader.readAsDataURL(coverFile); 
-
-                await new Promise((resolve) => {
-                    reader.onload = () => {
-                        bookCover = reader.result; 
-                        resolve();
-                    };
-                    reader.onerror = () => {
-                        console.error("Erro ao ler o arquivo de imagem.");
-                        alert("Não foi possível ler o arquivo de imagem. Tente uma URL ou outro arquivo.");
-                        bookCover = ''; 
-                        resolve();
-                    };
+                // Desmarca todos os gêneros primeiro
+                document.querySelectorAll('.genre-options input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
                 });
+
+                // Marca os gêneros do livro a ser editado
+                if (Array.isArray(bookToEdit.genre)) {
+                    bookToEdit.genre.forEach(g => {
+                        const checkbox = document.querySelector(`.genre-options input[value="${g}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    });
+                } else { // Caso o gênero ainda seja uma string simples
+                    const checkbox = document.querySelector(`.genre-options input[value="${bookToEdit.genre}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
+                }
+
+                editingBookId = bookIdToEdit;
+                addBookBtn.textContent = 'Salvar Alterações';
+
+                newBookTitleInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
+        }
+    });
 
-            let books = loadBooks(); 
-            let message = '';
+    // --- Gerenciamento de Empréstimos (Event Listeners) ---
+    searchLoanCodeBtn.addEventListener('click', () => {
+        const code = loanCodeInput.value.trim().toUpperCase();
+        if (!code) {
+            loanConfirmationResult.style.display = 'block';
+            loanConfirmationResult.innerHTML = '<span style="color: red;">Por favor, digite um código de retirada.</span>';
+            loanConfirmationResult.style.backgroundColor = '#ffe9e9';
+            return;
+        }
 
-            if (editingBookId) { // Se estamos em modo de edição
-                books = books.map(book => {
-                    if (book.id === editingBookId) {
+        let loans = loadLoans();
+        let books = loadBooks();
+        const loanToConfirm = loans.find(loan => loan.loanCode === code && loan.status === 'pending');
+
+        loanConfirmationResult.style.display = 'block';
+        loanConfirmationResult.innerHTML = '';
+        loanConfirmationResult.style.backgroundColor = '#e9ffe9';
+
+        if (loanToConfirm) {
+            const book = books.find(b => b.id === loanToConfirm.bookId);
+            if (book) {
+                loanConfirmationResult.innerHTML = `
+                    <p><strong>Empréstimo encontrado!</strong></p>
+                    <p><strong>Aluno:</strong> ${loanToConfirm.studentName}</p>
+                    <p><strong>Turma:</strong> ${loanToConfirm.studentClass}</p>
+                    <p><strong>Livro:</strong> ${book.title} (${book.author})</p>
+                    <div style="margin-top: 15px;" class="loan-actions">
+                        <button class="action-button" data-action="confirm-pickup-code" data-loan-id="${loanToConfirm.id}">Confirmar Retirada</button>
+                        <button class="action-button" data-action="cancel-pickup" data-loan-id="${loanToConfirm.id}">Cancelar Solicitação</button>
+                    </div>
+                `;
+                loanConfirmationResult.style.backgroundColor = '#e9ffe9';
+            } else {
+                loanConfirmationResult.innerHTML = '<span style="color: orange;">Livro associado a este código não encontrado.</span>';
+                loanConfirmationResult.style.backgroundColor = '#fff8e9';
+            }
+        } else {
+            loanConfirmationResult.innerHTML = '<span style="color: red;">Código de retirada não encontrado ou já utilizado.</span>';
+            loanConfirmationResult.style.backgroundColor = '#ffe9e9';
+        }
+    });
+
+    loanConfirmationResult.addEventListener('click', (event) => {
+        const loanId = event.target.dataset.loanId;
+        if (!loanId) return;
+
+        let loans = loadLoans();
+        let books = loadBooks();
+        const loan = loans.find(l => l.id === loanId);
+
+        if (!loan) {
+            alert("Empréstimo não encontrado.");
+            return;
+        }
+
+        if (event.target.dataset.action === 'confirm-pickup-code') {
+            if (confirm(`Confirmar a retirada do livro "${books.find(b => b.id === loan.bookId)?.title}" por ${loan.studentName}?`)) {
+                loans = loans.map(l => {
+                    if (l.id === loanId) {
+                        const pickupDate = new Date();
+                        const returnDate = new Date();
+                        returnDate.setDate(pickupDate.getDate() + 30);
+
                         return {
-                            ...book, 
-                            title: title,
-                            author: author,
-                            genre: genre,
-                            cover: bookCover || 'https://via.placeholder.com/100x150?text=Sem+Capa'
+                            ...l,
+                            status: 'borrowed',
+                            pickupDate: pickupDate.toISOString(),
+                            returnDate: returnDate.toISOString()
                         };
+                    }
+                    return l;
+                });
+
+                books = books.map(book => {
+                    if (book.id === loan.bookId) {
+                        return { ...book, status: 'borrowed', returnDate: loans.find(l => l.id === loanId).returnDate };
                     }
                     return book;
                 });
-                message = 'Livro atualizado com sucesso!';
-                editingBookId = null; 
-                addBookBtn.textContent = 'Adicionar Livro'; 
-            } else { // Se estamos adicionando um novo livro
-                const newBook = {
-                    id: generateUniqueId(), 
-                    title: title,
-                    author: author,
-                    genre: genre,
-                    cover: bookCover || 'https://via.placeholder.com/100x150?text=Sem+Capa', 
-                    status: 'available', 
-                    returnDate: null 
-                };
-                books.push(newBook); 
-                message = 'Livro adicionado com sucesso!';
+
+                saveLoans(loans);
+                saveBooks(books);
+                renderBooks();
+                alert('Retirada do livro confirmada com sucesso!');
+                loanCodeInput.value = '';
+                loanConfirmationResult.style.display = 'none';
             }
-            
-            saveBooks(books); 
-            renderBooks(); 
+        } else if (event.target.dataset.action === 'cancel-pickup') {
+            if (confirm(`Tem certeza que deseja CANCELAR a solicitação de "${books.find(b => b.id === loan.bookId)?.title}" para ${loan.studentName}?`)) {
+                loans = loans.filter(l => l.id !== loanId);
+                saveLoans(loans);
+                renderBooks();
+                alert('Solicitação de empréstimo cancelada.');
+                loanCodeInput.value = '';
+                loanConfirmationResult.style.display = 'none';
+            }
+        }
+    });
 
-            // Limpa os campos do formulário
-            newBookTitleInput.value = '';
-            newBookAuthorInput.value = '';
-            newBookGenreInput.value = '';
-            newBookCoverURLInput.value = '';
-            newBookCoverFileInput.value = ''; 
-            alert(message);
-        });
+    currentLoansList.addEventListener('click', (event) => {
+        if (event.target.dataset.action === 'mark-returned') {
+            const loanIdToMarkReturned = event.target.dataset.loanId;
 
-        // --- Gerenciamento de Livros (Excluir/Editar) ---
-        currentBooksList.addEventListener('click', (event) => {
-            // Lógica de EXCLUIR 
-            if (event.target.dataset.action === 'delete') {
-                const bookIdToDelete = event.target.dataset.bookId;
-                
-                if (confirm('Tem certeza que deseja excluir este livro do catálogo?')) {
-                    let books = loadBooks(); 
-                    books = books.filter(book => book.id !== bookIdToDelete);
-                    saveBooks(books); 
-                    renderBooks(); 
-                    alert('Livro excluído com sucesso!');
-                }
-            } 
-            // Lógica para EDITAR
-            else if (event.target.dataset.action === 'edit') {
-                const bookIdToEdit = event.target.dataset.bookId;
-                const books = loadBooks();
-                const bookToEdit = books.find(book => book.id === bookIdToEdit);
+            let loans = loadLoans();
+            let books = loadBooks();
 
-                if (bookToEdit) {
-                    newBookTitleInput.value = bookToEdit.title;
-                    newBookAuthorInput.value = bookToEdit.author;
-                    newBookGenreInput.value = bookToEdit.genre;
-                    if (bookToEdit.cover && !bookToEdit.cover.startsWith('data:image')) {
-                        newBookCoverURLInput.value = bookToEdit.cover;
-                    } else {
-                        newBookCoverURLInput.value = ''; 
+            const loanToReturn = loans.find(loan => loan.id === loanIdToMarkReturned);
+
+            if (loanToReturn) {
+                loans = loans.map(loan => {
+                    if (loan.id === loanIdToMarkReturned) {
+                        return {
+                            ...loan,
+                            status: 'returned',
+                            actualReturnDate: new Date().toISOString()
+                        };
                     }
-                    newBookCoverFileInput.value = ''; 
+                    return loan;
+                });
 
-                    editingBookId = bookIdToEdit; 
-                    addBookBtn.textContent = 'Salvar Alterações'; 
+                books = books.map(book => {
+                    if (book.id === loanToReturn.bookId) {
+                        return { ...book, status: 'available', returnDate: null };
+                    }
+                    return book;
+                });
 
-                    newBookTitleInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                saveLoans(loans);
+                saveBooks(books);
+                renderBooks();
+                alert('Livro devolvido com sucesso e status atualizado!');
+            }
+        }
+    });
+
+    document.getElementById('confirmReturnBtn').addEventListener('click', () => {
+        const searchTerm = document.getElementById('returnBookCode').value.trim().toUpperCase();
+
+        if (!searchTerm) {
+            alert('Por favor, digite o código do livro ou o nome do aluno para registrar a devolução.');
+            return;
+        }
+
+        let loans = loadLoans();
+        let books = loadBooks();
+        let foundLoan = null;
+
+        foundLoan = loans.find(loan =>
+            (loan.loanCode === searchTerm || loan.id === searchTerm) && loan.status === 'borrowed'
+        );
+
+        if (!foundLoan) {
+            const matchingLoans = loans.filter(loan =>
+                loan.studentName.toUpperCase().includes(searchTerm) && loan.status === 'borrowed'
+            );
+
+            if (matchingLoans.length > 1) {
+                alert('Múltiplos empréstimos encontrados para este aluno. Por favor, seja mais específico ou use o código de retirada.');
+                return;
+            } else if (matchingLoans.length === 1) {
+                foundLoan = matchingLoans[0];
+            }
+        }
+
+        if (foundLoan) {
+            if (confirm(`Confirmar a devolução do livro "${books.find(b => b.id === foundLoan.bookId)?.title}" emprestado por ${foundLoan.studentName}?`)) {
+                loans = loans.map(loan => {
+                    if (loan.id === foundLoan.id) {
+                        return {
+                            ...loan,
+                            status: 'returned',
+                            actualReturnDate: new Date().toISOString()
+                        };
+                    }
+                    return loan;
+                });
+
+                books = books.map(book => {
+                    if (book.id === foundLoan.bookId) {
+                        return { ...book, status: 'available', returnDate: null };
+                    }
+                    return book;
+                });
+
+                saveLoans(loans);
+                saveBooks(books);
+                renderBooks();
+                document.getElementById('returnBookCode').value = '';
+                alert('Devolução registrada com sucesso!');
+            }
+        } else {
+            alert('Nenhum empréstimo ativo encontrado com este código ou nome.');
+        }
+    });
+
+
+    // --- Lógica das Abas ---
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            button.classList.add('active');
+
+            const targetTab = button.dataset.tab;
+            document.getElementById(targetTab).classList.add('active');
+        });
+    });
+
+    // --- Lógica dos Filtros de Pesquisa (GÊNERO/STATUS) ---
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove a classe 'active' de todos os botões de filtro
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Adiciona a classe 'active' ao botão clicado
+            button.classList.add('active');
+
+            // Atualiza o filtro ativo com base no data-filter do botão
+            activeGenreFilter = button.dataset.filter;
+            
+            renderBooks(); // Chama renderBooks para aplicar os novos filtros
+        });
+    });
+
+    // Event listener para a barra de pesquisa de texto
+    searchInput.addEventListener('input', () => {
+        renderBooks(); // Re-renderiza a lista de livros sempre que o texto de pesquisa muda
+    });
+
+
+    // --- Evento de Carregamento da Página ---
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!localStorage.getItem('books')) {
+            const initialBooks = [
+                {
+                    id: 'book1',
+                    title: 'O Pequeno Príncipe',
+                    author: 'Antoine de Saint-Exupéry',
+                    genre: ['Ficção'], // Alterado para array
+                    cover: 'https://m.media-amazon.com/images/I/71pE1G+k-3L._AC_UF1000,1000_QL80_.jpg',
+                    status: 'available',
+                    returnDate: null
+                },
+                {
+                    id: 'book2',
+                    title: 'Dom Casmurro',
+                    author: 'Machado de Assis',
+                    genre: ['Ficção', 'Romance'], // Exemplo com múltiplos gêneros
+                    cover: 'https://m.media-amazon.com/images/I/7142Hh48t2L._AC_UF1000,1000_QL80_.jpg',
+                    status: 'available',
+                    returnDate: null
+                },
+                {
+                    id: 'book3',
+                    title: '1984',
+                    author: 'George Orwell',
+                    genre: ['Ficção', 'Ficção Científica'], // Exemplo com múltiplos gêneros
+                    cover: 'https://m.media-amazon.com/images/I/71WTUqA+y2L._AC_UF1000,1000_QL80_.jpg',
+                    status: 'available',
+                    returnDate: null
+                },
+                {
+                    id: 'book4',
+                    title: 'Sapiens: Uma Breve História da Humanidade',
+                    author: 'Yuval Noah Harari',
+                    genre: ['História', 'Não Ficção'], // Exemplo com múltiplos gêneros
+                    cover: 'https://m.media-amazon.com/images/I/81+j8b3A4aL._AC_UF1000,1000_QL80_.jpg',
+                    status: 'available',
+                    returnDate: null
+                },
+                {
+                    id: 'book5',
+                    title: 'O Hobbit',
+                    author: 'J.R.R. Tolkien',
+                    genre: ['Fantasia', 'Ficção'],
+                    cover: 'https://m.media-amazon.com/images/I/91M-1M3c3qL._AC_UF1000,1000_QL80_.jpg',
+                    status: 'available',
+                    returnDate: null
+                },
+                {
+                    id: 'book6',
+                    title: 'Frankenstein',
+                    author: 'Mary Shelley',
+                    genre: ['Ficção Científica', 'Ficção'],
+                    cover: 'https://m.media-amazon.com/images/I/91tNqf1f7LL._AC_UF1000,1000_QL80_.jpg',
+                    status: 'available',
+                    returnDate: null
                 }
-            }
-        });
+            ];
+            saveBooks(initialBooks);
+        }
 
-        // --- Gerenciamento de Empréstimos (Confirmar Retirada) ---
-        pendingLoansList.addEventListener('click', (event) => {
-            if (event.target.dataset.action === 'confirm-pickup') {
-                const loanIdToConfirm = event.target.dataset.loanId;
-                
-                let loans = loadLoans();
-                let books = loadBooks();
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            adminArea.classList.add('show');
+            document.querySelector('.tab-button').classList.add('active');
+            document.querySelector('.tab-content').classList.add('active');
+        }
 
-                // Encontra o empréstimo a ser confirmado
-                const loanToConfirm = loans.find(loan => loan.id === loanIdToConfirm);
+        // Define o botão "Todos" como ativo por padrão na inicialização
+        const allButton = document.querySelector('.filter-buttons button[data-filter="all"]');
+        if (allButton) {
+            allButton.classList.add('active');
+        }
 
-                if (loanToConfirm) {
-                    // 1. Atualiza o status do empréstimo para 'borrowed'
-                    // 2. Define uma data de retorno (ex: 7 dias a partir de hoje)
-                    loans = loans.map(loan => {
-                        if (loan.id === loanIdToConfirm) {
-                            const returnDate = new Date();
-                            returnDate.setDate(returnDate.getDate() + 7); // Exemplo: 7 dias de empréstimo
-                            return { 
-                                ...loan, 
-                                status: 'borrowed', 
-                                returnDate: returnDate.toISOString() // Salva como ISO string
-                            };
-                        }
-                        return loan;
-                    });
-
-                    // 3. Atualiza o status do livro correspondente para 'borrowed'
-                    books = books.map(book => {
-                        if (book.id === loanToConfirm.bookId) {
-                            return { ...book, status: 'borrowed' };
-                        }
-                        return book;
-                    });
-
-                    saveLoans(loans); // Salva os empréstimos atualizados
-                    saveBooks(books); // Salva os livros atualizados
-
-                    renderBooks(); // Re-renderiza tudo para atualizar as listas
-                    alert('Retirada do livro confirmada com sucesso!');
-                }
-            }
-        });
-
-        // --- Lógica das Abas ---
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-
-                button.classList.add('active');
-
-                const targetTab = button.dataset.tab; 
-                document.getElementById(targetTab).classList.add('active');
-            });
-        });
-
-
-        // --- Evento de Carregamento da Página ---
-        document.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('isLoggedIn') === 'true') {
-                adminArea.classList.add('show');
-                // Garante que a primeira aba esteja ativa ao carregar a área administrativa
-                document.querySelector('.tab-button').classList.add('active');
-                document.querySelector('.tab-content').classList.add('active');
-            }
-            renderBooks(); // CHAMA A FUNÇÃO AQUI para exibir os livros e empréstimos ao carregar!
-        });
-    </script>
+        renderBooks();
+    });
+</script>
 </body>
 </html>
