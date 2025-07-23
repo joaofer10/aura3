@@ -5,112 +5,580 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca ETEC Darcy - Empréstimo de Livros</title>
     <link rel="icon" href="assets/imagens/aura.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-/* Estilos básicos para ver a estrutura - serão refinados no CSS */
+:root {
+    /* Paleta de Cores Verde com Alto Contraste */
+    --cor-destaque: #4A6349;
+    --cor-secundaria: #A0B99F;
+    --cor-principal: #C8D8BF;
+    
+    /* Cores Neutras e de Status */
+    --cor-fundo: #f8f9fa;
+    --cor-branco: #ffffff;
+    --cor-texto: #212529;
+    --cor-texto-claro: #f8f9fa;
+    --cor-sucesso: #28a745;
+    --cor-erro: #dc3545;
+    --cor-aviso: #ffc107;
+    --cor-cinza: #6c757d;
+    --cor-cinza-claro: #ddd;
+    
+    /* Fontes */
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Poppins', sans-serif;
+}
+
+html {
+    scrollbar-gutter: stable; /* Previne o salto de layout */
+}
+/* Para Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--cor-cinza) transparent;
+}
+/* Para Chrome, Safari e Edge */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--cor-cinza);
+    border-radius: 10px;
+    border: 2px solid var(--cor-fundo);
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--cor-destaque);
+}
+
 body {
-    font-family: sans-serif;
+    font-family: var(--font-body);
     margin: 0;
-    background-color: #E0D8B0; /* Bege Mais Profundo */
-    color: #333;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+main {
+    flex-grow: 1;
+    width: 100%;
+    max-width: 1400px; /* Largura máxima para o conteúdo */
+    margin: 0 auto; /* Centraliza o conteúdo */
+    padding: 0 20px; /* Espaçamento lateral para telas menores */
+    box-sizing: border-box;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
 }
 header {
-    background-color: #C8D8BF; /* Verde Sálvia */
-    color: #333;
+    background-color: var(--cor-destaque);
+    color: var(--cor-texto-claro);
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-bottom: 1px solid #eee;
+    transition: padding-right 0.3s ease; /* Para o ajuste do widget de acessibilidade */
 }
 header h1 {
     margin: 0;
-    font-size: 1.8em;
+    font-size: 1.5em;
+    flex-shrink: 0; 
 }
-.btn-login {
-    background-color: #8B4513; /* Marrom Avelã */
-    color: white;
-    padding: 8px 15px;
-    margin-right: 6vh;
-    border: none;
-    border-radius: 5px;
+
+/* Seção de pesquisa com filtro mobile */
+.header-search-section {
+    position: relative;
+    flex-grow: 1;
+    max-width: 500px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.header-search {
+    position: relative;
+    flex-grow: 1;
+}
+.header-search .fa-search {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    transition: color 0.3s ease;
+    z-index: 2;
+}
+#searchInput {
+    width: 100%;
+    padding: 12px 20px 12px 45px;
+    border: 2px solid transparent;
+    border-radius: 50px;
+    font-family: var(--font-body);
+    font-size: 1em;
+    box-sizing: border-box;
+    background-color: #f0f2f1;
+    transition: all 0.3s ease;
+    outline: none;
+}
+#searchInput::placeholder {
+    color: #999;
+}
+.header-search:focus-within .fa-search {
+    color: var(--cor-destaque);
+}
+#searchInput:focus {
+    background-color: #fff;
+    border-color: var(--cor-destaque);
+    box-shadow: 0 0 0 3px rgba(74, 99, 73, 0.15);
+}
+
+/* Dropdown de filtros mobile */
+.mobile-filter-dropdown {
+    display: none;
+    position: relative;
+}
+
+.mobile-filter-toggle {
+    background-color: #f0f2f1;
+    border: 2px solid transparent;
+    border-radius: 50px;
+    padding: 12px 15px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
 }
-.search-filter-section {
-    background-color: #A0B99F; /* Verde Oliva Suave/Musgo */
-    padding: 20px;
+
+.mobile-filter-toggle:hover, .mobile-filter-toggle.active {
+    background-color: #fff;
+    border-color: var(--cor-destaque);
+    box-shadow: 0 0 0 3px rgba(74, 99, 73, 0.15);
+}
+
+.mobile-filter-toggle i {
+    color: var(--cor-destaque);
+    font-size: 1.2em;
+}
+
+.mobile-filter-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    padding: 15px 0;
+    min-width: 250px;
+    z-index: 1000;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.mobile-filter-menu.show {
+    display: block;
+    animation: fadeInScale 0.2s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.mobile-filter-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--cor-texto);
+    font-weight: 500;
+}
+
+.mobile-filter-item:hover {
+    background-color: #f8f9fa;
+}
+
+.mobile-filter-item.active {
+    background-color: var(--cor-principal);
+    color: var(--cor-destaque);
+    font-weight: 600;
+}
+
+.mobile-filter-item i {
+    width: 18px;
     text-align: center;
-    border-radius: 0 0 10px 10px;
+    color: var(--cor-destaque);
 }
-.search-filter-section input[type="text"] {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 70%;
-    max-width: 400px;
-    margin-right: 10px;
+
+.btn-login {
+    background-color: var(--cor-branco);
+    color: var(--cor-destaque);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.btn-login i {
+    font-size: 1.1em;
+}
+
+/* Corrige sobreposição do widget de acessibilidade */
+body.userway_widget_active header {
+    padding-right: 80px;
+}
+
+.filter-section {
+    background-color: var(--cor-principal);
+    padding: 15px 20px;
+    text-align: center;
+    border-radius: 0 0 20px 20px;
 }
 .filter-buttons button {
-    background-color: #8B4513;
-    color: white;
+    background-color: rgba(255,255,255,0.5);
+    color: var(--cor-destaque);
     padding: 8px 15px;
-    border: none;
-    border-radius: 5px;
+    border: 1px solid transparent;
+    border-radius: 20px;
     cursor: pointer;
     margin: 5px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
+
+.filter-buttons button i {
+    font-size: 1em;
+}
+
+.filter-buttons button:hover {
+    background-color: rgba(255,255,255,0.8);
+    border-color: var(--cor-destaque);
+}
+
+.filter-buttons button.active {
+    background-color: var(--cor-destaque); 
+    color: white; 
+    border-color: var(--cor-destaque);
+    font-weight: bold;
+}
+
 .book-list-container {
-    padding: 20px;
+    padding: 20px 0 70px 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 1fr;
     gap: 20px;
+    position: relative;
 }
+
+#bookListWrapper {
+    position: relative;
+}
+
+#bookListWrapper.has-more-books::after {
+    content: '';
+    position: absolute;
+    bottom: 27px;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(180deg, transparent 0%, #f8f9fafb 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.see-more-text {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--cor-destaque);
+    font-weight: 600;
+    font-size: 1.1em;
+    z-index: 2;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: none;
+    padding: 8px 16px;
+    background-color: rgba(248, 249, 250, 0.9);
+    border-radius: 20px;
+    border: 2px solid var(--cor-destaque);
+}
+
+.see-more-text:hover {
+    transform: translateX(-50%) translateY(-3px);
+    background-color: var(--cor-destaque);
+    color: white;
+}
+
+/* Skeleton Loading */
+.skeleton-card {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
+}
+
+.skeleton-img {
+    width: 120px;
+    height: 180px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+    margin: 0 auto 15px;
+    border-radius: 10px;
+}
+
+.skeleton-text {
+    height: 16px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+    border-radius: 4px;
+    margin: 8px 0;
+}
+
+.skeleton-text.title {
+    height: 20px;
+    width: 80%;
+    margin: 0 auto 10px;
+}
+
+.skeleton-text.author {
+    height: 14px;
+    width: 60%;
+    margin: 0 auto 8px;
+}
+
+.skeleton-text.status {
+    height: 14px;
+    width: 40%;
+    margin: 0 auto 15px;
+}
+
+.skeleton-btn {
+    height: 36px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes skeleton-pulse {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.8;
+    }
+}
+
 .book-card {
     background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
+
+.book-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.book-card.unavailable {
+    opacity: 0.6;
+    order: 999;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+
+.book-card.unavailable::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(0,0,0,0.03) 10px,
+        rgba(0,0,0,0.03) 20px
+    );
+    pointer-events: none;
+}
+
+.book-card.unavailable:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
 .book-card img {
-    max-width: 100px;
-    height: auto;
-    margin-bottom: 10px;
+    width: 120px;
+    height: 180px;
+    border: 0.25vh dashed var(--cor-destaque);
+    padding: 3px;
+    object-fit: cover;
+    margin: 0 auto 15px;
+    border-radius: 10px;
 }
+
 .book-card h3 {
     margin-top: 0;
-    color: #C8D8BF; /* Verde Sálvia */
+    color: #333;
+    font-size: 1.1em;
 }
 .book-card p {
     font-size: 0.9em;
     color: #555;
+    margin: 5px 0;
 }
 .book-status {
     font-weight: bold;
-    color: green; /* Será dinâmico via JS */
+    color: green;
     margin-bottom: 10px;
 }
+
+.return-estimate {
+    font-size: 0.8em;
+    color: var(--cor-cinza);
+    font-style: italic;
+    margin-top: 5px;
+}
 .btn-emprestar {
-    background-color: #A0B99F; /* Verde Oliva Suave/Musgo */
-    color: #8B4513; /* Marrom Avelã */
+    background-color: var(--cor-secundaria);
+    color: var(--cor-destaque);
+    font-weight: 600;
     padding: 8px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
+    font-family: var(--font-body);
 }
+.btn-emprestar:disabled {
+    background-color: #ccc;
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* Mensagem de "nenhum livro encontrado" melhorada */
+.no-books-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 20px;
+    margin: 40px 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.no-books-icon {
+    font-size: 4em;
+    color: var(--cor-destaque);
+    margin-bottom: 20px;
+    opacity: 0.7;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.no-books-message h3 {
+    color: var(--cor-destaque);
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.no-books-message p {
+    color: var(--cor-cinza);
+    font-size: 1.1em;
+    margin: 0;
+    max-width: 400px;
+    line-height: 1.5;
+}
+
 footer {
-    background-color: #A0B99F; /* Marrom Avelã */
-    color: white;
+    background-color: var(--cor-destaque);
+    color: var(--cor-texto-claro);
     text-align: center;
     padding: 20px;
     margin-top: 30px;
+    border-top: 1px solid #eee;
 }
 
 /* Modal de Empréstimo */
 .modal {
-    display: none; /* Escondido por padrão */
+    display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 100;
     left: 0;
     top: 0;
     width: 100%;
@@ -121,18 +589,19 @@ footer {
     align-items: center;
 }
 .modal.show {
-    display: flex; /* Exibido quando a classe 'show' é adicionada */
+    display: flex;
 }
 .modal-content {
-    background-color: #FCFBF7; /* Off-white suave - NOVO */
+    background-color: var(--cor-branco);
     margin: auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: none;
     width: 80%;
     max-width: 500px;
     border-radius: 10px;
     text-align: center;
     position: relative;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 }
 .close-button {
     color: #aaa;
@@ -156,68 +625,187 @@ footer {
     margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    font-family: var(--font-body);
 }
 .modal-content button {
-    background-color: #A0B99F;
-    color: #8B4513;
+    background-color: var(--cor-destaque);
+    color: var(--cor-branco);
+    font-weight: 600;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
-}
-/* Estilo para os botões de filtro */
-.filter-buttons button {
-    background-color: #f0f0f0; /* Cor de fundo padrão */
-    color: #333; /* Cor do texto padrão */
-    border: 1px solid #ccc;
-    padding: 8px 15px;
-    margin: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-    font-size: 0.9em;
+    font-family: var(--font-body);
 }
 
-.filter-buttons button:hover {
-    background-color: #e0e0e0; /* Um pouco mais escuro ao passar o mouse */
+/* Media Queries para a grade de livros responsiva */
+@media (min-width: 600px) {
+    .book-list-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-/* NOVO: Estilo para o botão de filtro ATIVO */
-.filter-buttons button.active {
-    background-color: #007bff; /* Cor principal, um azul vibrante */
-    color: white; /* Texto branco para contraste */
-    border-color: #007bff;
-    font-weight: bold; /* Opcional: deixar o texto em negrito */
-    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3); /* Sombra sutil para destaque */
+@media (min-width: 992px) {
+    .book-list-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Media queries para mobile */
+@media (max-width: 768px) {
+    /* Esconde os filtros desktop no mobile */
+    .filter-section {
+        display: none;
+    }
+    
+    /* Mostra o dropdown mobile */
+    .mobile-filter-dropdown {
+        display: block;
+    }
+    
+    /* Ajustes no header para mobile */
+    header {
+        gap: 10px;
+        flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+        justify-content: space-between;
+    }
+    
+    header h1 {
+        font-size: 1.2em;
+        width: 100%; /* Faz o título ocupar a primeira linha */
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    
+    .header-search-section {
+        order: 2; /* Fica na segunda linha */
+        width: 100%; /* Ocupa a largura total da segunda linha */
+        max-width: none;
+        flex-grow: 1;
+    }
+
+    .btn-login {
+        order: 1; /* Move para a primeira linha, ao lado do título (que será ajustado) */
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+    
+    .btn-login span {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 10px 15px;
+    }
+    
+    header h1 {
+        font-size: 1.1em;
+    }
+    
+    #searchInput {
+        padding: 10px 18px 10px 40px;
+        font-size: 0.9em;
+    }
+    
+    .header-search .fa-search {
+        left: 15px;
+    }
+    
+    .mobile-filter-toggle {
+        padding: 10px 12px;
+        min-width: 44px;
+    }
 }
     </style>
 </head>
 <body>
     <header>
         <h1>Biblioteca ETEC Darcy</h1>
-        <button class="btn-login" id="adminLoginBtn">Login Bibliotecária</button>
+        <div class="header-search-section">
+            <div class="header-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Pesquisar por título ou autor...">
+            </div>
+            <div class="mobile-filter-dropdown">
+                <div class="mobile-filter-toggle" id="mobileFilterToggle">
+                    <i class="fas fa-filter"></i>
+                </div>
+                <div class="mobile-filter-menu" id="mobileFilterMenu">
+                    <div class="mobile-filter-item active" data-filter="all">
+                        <i class="fas fa-list"></i>
+                        <span>Todos</span>
+                    </div>
+                    <div class="mobile-filter-item" data-filter="available">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Disponíveis</span>
+                    </div>
+                    <div class="mobile-filter-item" data-filter="Ficção">
+                        <i class="fas fa-book"></i>
+                        <span>Ficção</span>
+                    </div>
+                    <div class="mobile-filter-item" data-filter="Fantasia">
+                        <i class="fas fa-magic"></i>
+                        <span>Fantasia</span>
+                    </div>
+                    <div class="mobile-filter-item" data-filter="Ficção Científica">
+                        <i class="fas fa-rocket"></i>
+                        <span>Ficção Científica</span>
+                    </div>
+                    <div class="mobile-filter-item" data-filter="Mistério">
+                        <i class="fas fa-search"></i>
+                        <span>Mistério</span>
+                    </div>
+                    <div class="mobile-filter-item" data-filter="Romance">
+                        <i class="fas fa-heart"></i>
+                        <span>Romance</span>
+                    </div>
+                    <div class="mobile-filter-item" data-filter="Biografia">
+                        <i class="fas fa-user"></i>
+                        <span>Biografia</span>
+                    </div>
+                    <div class="mobile-filter-item" data-filter="História">
+                        <i class="fas fa-landmark"></i>
+                        <span>História</span>
+                    </div>
+                    <div class="mobile-filter-item" data-filter="Outros">
+                        <i class="fas fa-ellipsis-h"></i>
+                        <span>Outros</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn-login" id="adminLoginBtn">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Login Admin</span>
+        </button>
     </header>
 
     <main>
-        <section class="search-filter-section">
-            <input type="text" id="searchInput" placeholder="Pesquisar por título, autor, etc.">
+        <section class="filter-section">
             <div class="filter-buttons">
-    <button data-filter="all">Todos</button>
-    <button data-filter="available">Disponíveis</button>
-    <button data-filter="Ficção">Ficção</button>
-    <button data-filter="Fantasia">Fantasia</button>
-    <button data-filter="Ficção Científica">Ficção Científica</button>
-    <button data-filter="Mistério">Mistério</button>
-    <button data-filter="Romance">Romance</button>
-    <button data-filter="Biografia">Biografia</button>
-    <button data-filter="História">História</button>
-    <button data-filter="Outros">Outros</button>
-</div>
+                <button data-filter="all"><i class="fas fa-list"></i> Todos</button>
+                <button data-filter="available"><i class="fas fa-check-circle"></i> Disponíveis</button>
+                <button data-filter="Ficção"><i class="fas fa-book"></i> Ficção</button>
+                <button data-filter="Fantasia"><i class="fas fa-magic"></i> Fantasia</button>
+                <button data-filter="Ficção Científica"><i class="fas fa-rocket"></i> Ficção Científica</button>
+                <button data-filter="Mistério"><i class="fas fa-search"></i> Mistério</button>
+                <button data-filter="Romance"><i class="fas fa-heart"></i> Romance</button>
+                <button data-filter="Biografia"><i class="fas fa-user"></i> Biografia</button>
+                <button data-filter="História"><i class="fas fa-landmark"></i> História</button>
+                <button data-filter="Outros"><i class="fas fa-ellipsis-h"></i> Outros</button>
+            </div>
         </section>
 
-        <section class="book-list-container" id="bookList">
-            </section>
+        <div id="bookListWrapper">
+            <section class="book-list-container" id="bookList"></section>
+            <div class="see-more-text" id="seeMoreText">Ver Mais</div>
+        </div>
 
         <div id="loanModal" class="modal">
             <div class="modal-content">
@@ -240,8 +828,7 @@ footer {
 </body>
 </html>
 
- <script>
-    // localStorage.removeItem("books")
+<script>
     // --- Variáveis Globais e Seletores de Elementos ---
     const loanModal = document.getElementById('loanModal');
     const closeButton = document.querySelector('.close-button');
@@ -252,70 +839,113 @@ footer {
     const loanCodeDisplay = document.getElementById('loanCodeDisplay');
     const adminLoginBtn = document.getElementById('adminLoginBtn');
     const bookListContainer = document.getElementById('bookList');
-
-    // VARIÁVEIS PARA FILTROS DE PESQUISA
+    const bookListWrapper = document.getElementById('bookListWrapper');
+    const seeMoreText = document.getElementById('seeMoreText');
     const searchInput = document.getElementById('searchInput');
     const filterButtons = document.querySelectorAll('.filter-buttons button');
+    const mobileFilterToggle = document.getElementById('mobileFilterToggle');
+    const mobileFilterMenu = document.getElementById('mobileFilterMenu');
+    const mobileFilterItems = document.querySelectorAll('.mobile-filter-item');
 
-    let currentBookId = null; // Usado para empréstimo
-    let activeGenreFilter = 'all'; // 'all', 'available', 'Ficção', 'Fantasia', etc.
+    let currentBookId = null; 
+    let activeGenreFilter = 'all';
+    let booksDisplayedCount = 6; // Controla quantos livros são mostrados
+    let isLoading = false;
 
-    // --- Funções de Gerenciamento de Dados (Livros) ---
-    function loadBooks() {
-        const books = JSON.parse(localStorage.getItem('books')) || [];
-        return books;
+    // --- Funções de Gerenciamento de Dados (Livros e Empréstimos) ---
+    function loadData(key) { return JSON.parse(localStorage.getItem(key)) || []; }
+    function saveData(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+	function generateUniqueId() { return Date.now().toString(36) + Math.random().toString(36).substr(2); }
+
+    // --- Função para criar skeleton loading ---
+    function createSkeletonCards(count = 6) {
+        let skeletonHTML = '';
+        for (let i = 0; i < count; i++) {
+            skeletonHTML += `
+                <div class="skeleton-card">
+                    <div>
+                        <div class="skeleton-img"></div>
+                        <div class="skeleton-text title"></div>
+                        <div class="skeleton-text author"></div>
+                        <div class="skeleton-text status"></div>
+                    </div>
+                    <div class="skeleton-btn"></div>
+                </div>
+            `;
+        }
+        return skeletonHTML;
     }
 
-    function saveBooks(books) {
-        localStorage.setItem('books', JSON.stringify(books));
-    }
-	
-	function generateUniqueId() {
-        return Date.now().toString(36) + Math.random().toString(36).substr(2);
-    }
-
-    // --- Funções de Gerenciamento de Dados (Empréstimos) ---
-    function loadLoans() {
-        const loans = JSON.parse(localStorage.getItem('loans')) || [];
-        return loans;
-    }
-
-    function saveLoans(loans) {
-        localStorage.setItem('loans', JSON.stringify(loans));
+    // --- Função para criar mensagem de nenhum livro encontrado ---
+    function createNoBooksMessage() {
+        return `
+            <div class="no-books-message">
+                <div class="no-books-icon"><i class="fas fa-book-dead"></i></div>
+                <h3>Nenhum livro encontrado</h3>
+                <p>Tente ajustar sua pesquisa ou selecionar um filtro diferente.</p>
+            </div>
+        `;
     }
 
     // --- Funções para Renderizar Livros na UI ---
     function renderBooks() {
-        const books = loadBooks();
-        bookListContainer.innerHTML = '';
+        if (isLoading) return;
+        isLoading = true;
+        bookListContainer.innerHTML = createSkeletonCards(booksDisplayedCount);
 
-        const filteredBooks = applyFilters(books);
+        // Simula um pequeno atraso para o efeito de loading ser visível
+        setTimeout(() => {
+            const books = loadData('books');
+            const filteredBooks = applyFilters(books);
+            const booksToRender = filteredBooks.slice(0, booksDisplayedCount);
 
-        if (filteredBooks.length === 0) {
-            bookListContainer.innerHTML = '<p style="text-align: center; margin-top: 50px;">Nenhum livro encontrado com os filtros selecionados.</p>';
-        } else {
-            filteredBooks.forEach(book => {
-                const bookCard = `
-                    <div class="book-card" data-book-id="${book.id}" data-book-title="${book.title}" data-book-author="${book.author}" data-book-genre="${book.genre}" data-book-status="${book.status}">
-                        <img src="${book.cover || 'https://placehold.co/100x150?text=Sem+Foto'}" alt="Capa do Livro: ${book.title}" onerror="this.onerror=null;this.src='https://placehold.co/100x150?text=Sem+Foto';">
-                        <h3>${book.title}</h3>
-                        <p>Autor: ${book.author}</p>
-                        <p class="book-status">${book.status === 'available' ? 'Disponível' : `Emprestado`}</p>
-                        <button class="btn-emprestar" ${book.status !== 'available' ? 'disabled' : ''}>Emprestar</button>
-                    </div>
-                `;
-                bookListContainer.insertAdjacentHTML('beforeend', bookCard);
+            bookListContainer.innerHTML = ''; // Limpa os skeletons
+
+            if (booksToRender.length === 0) {
+                bookListContainer.innerHTML = createNoBooksMessage();
+            } else {
+                booksToRender.forEach(book => {
+                    const statusInfo = {
+                        available: { text: 'Disponível', color: 'var(--cor-sucesso)' },
+                        pending: { text: 'Reservado', color: 'var(--cor-aviso)' },
+                        borrowed: { text: 'Emprestado', color: 'var(--cor-erro)' }
+                    };
+                    const currentStatus = statusInfo[book.status] || { text: 'Indefinido', color: 'var(--cor-cinza)' };
+
+                    const bookCard = `
+                        <div class="book-card ${book.status !== 'available' ? 'unavailable' : ''}" data-book-id="${book.id}">
+                            <div>
+                                <img src="${book.cover || 'https://placehold.co/100x150?text=Sem+Foto'}" alt="Capa do Livro: ${book.title}" onerror="this.onerror=null;this.src='https://placehold.co/100x150?text=Sem+Foto';">
+                                <h3>${book.title}</h3>
+                                <p>Autor: ${book.author}</p>
+                                <p class="book-status" style="color: ${currentStatus.color};">${currentStatus.text}</p>
+                                ${book.returnDate ? `<p class="return-estimate">Devolução prevista: ${new Date(book.returnDate).toLocaleDateString('pt-BR')}</p>` : ''}
+                            </div>
+                            <button class="btn-emprestar" ${book.status !== 'available' ? 'disabled' : ''}>Emprestar</button>
+                        </div>
+                    `;
+                    bookListContainer.insertAdjacentHTML('beforeend', bookCard);
+                });
+            }
+            
+            document.querySelectorAll('.btn-emprestar').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const bookCard = event.target.closest('.book-card');
+                    const bookTitle = bookCard.querySelector('h3').textContent;
+                    const bookId = bookCard.dataset.bookId;
+                    openLoanModal(bookTitle, bookId);
+                });
             });
-        }
-        
-        document.querySelectorAll('.btn-emprestar').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const bookCard = event.target.closest('.book-card');
-                const bookTitle = bookCard.querySelector('h3').textContent;
-                const bookId = bookCard.dataset.bookId;
-                openLoanModal(bookTitle, bookId);
-            });
-        });
+            
+            if (filteredBooks.length > booksDisplayedCount) {
+                seeMoreText.style.display = 'inline-block';
+                bookListWrapper.classList.add('has-more-books');
+            } else {
+                seeMoreText.style.display = 'none';
+                bookListWrapper.classList.remove('has-more-books');
+            }
+            isLoading = false;
+        }, 300); // 300ms de delay
     }
 
     // --- Função para Aplicar Filtros ---
@@ -332,14 +962,18 @@ footer {
         if (activeGenreFilter === 'available') {
             filteredBooks = filteredBooks.filter(book => book.status === 'available');
         } else if (activeGenreFilter !== 'all') {
-            filteredBooks = filteredBooks.filter(book => {
-                if (Array.isArray(book.genre)) {
-                    return book.genre.includes(activeGenreFilter);
-                } else {
-                    return book.genre === activeGenreFilter;
-                }
-            });
+            filteredBooks = filteredBooks.filter(book => 
+                Array.isArray(book.genre) && book.genre.includes(activeGenreFilter)
+            );
         }
+
+        // Ordena os livros para que os indisponíveis apareçam no final
+        filteredBooks.sort((a, b) => {
+            if (a.status === 'available' && b.status !== 'available') return -1;
+            if (a.status !== 'available' && b.status === 'available') return 1;
+            return a.title.localeCompare(b.title);
+        });
+
         return filteredBooks;
     }
 
@@ -365,6 +999,10 @@ footer {
         if (event.target === loanModal) {
             closeLoanModal();
         }
+        if (!mobileFilterMenu.contains(event.target) && !mobileFilterToggle.contains(event.target)) {
+            mobileFilterMenu.classList.remove('show');
+            mobileFilterToggle.classList.remove('active');
+        }
     });
 
     confirmLoanBtn.addEventListener('click', () => {
@@ -385,21 +1023,22 @@ footer {
             loanDate: new Date().toISOString(),
             pickupDate: null,
             returnDate: null,
-            status: 'pending'
+            status: 'pending',
+            notification_seen: false
         };
 
-        const loans = loadLoans();
+        const loans = loadData('loans');
         loans.push(newLoan);
-        saveLoans(loans);
+        saveData('loans', loans);
 		
-		let books = loadBooks();
+		let books = loadData('books');
 		books = books.map(book => {
 			if(book.id === currentBookId) {
 				return {...book, status: 'pending'}
 			}
 			return book;
 		});
-		saveBooks(books);
+		saveData('books', books);
 
         loanCodeDisplay.innerHTML = `Seu código de retirada: <br><strong>${loanCode}</strong><br>Anote este código para apresentar na secretaria.`;
         loanCodeDisplay.style.display = 'block';
@@ -412,82 +1051,58 @@ footer {
         window.location.href = 'admin_login.html';
     });
 	
+    function handleFilterClick(filterValue) {
+        activeGenreFilter = filterValue;
+        booksDisplayedCount = 6;
+        renderBooks();
+        
+        // Sincroniza os dois menus de filtro
+        document.querySelectorAll(`.filter-buttons button, .mobile-filter-item`).forEach(el => {
+            el.classList.remove('active');
+            if (el.dataset.filter === filterValue) {
+                el.classList.add('active');
+            }
+        });
+    }
+
 	filterButtons.forEach(button => {
         button.addEventListener('click', () => {
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            activeGenreFilter = button.dataset.filter;
-            renderBooks();
+            handleFilterClick(button.dataset.filter);
         });
     });
 
-    searchInput.addEventListener('input', renderBooks);
+    mobileFilterItems.forEach(item => {
+        item.addEventListener('click', () => {
+            handleFilterClick(item.dataset.filter);
+            mobileFilterMenu.classList.remove('show');
+            mobileFilterToggle.classList.remove('active');
+        });
+    });
+
+    mobileFilterToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mobileFilterMenu.classList.toggle('show');
+        mobileFilterToggle.classList.toggle('active');
+    });
+
+    searchInput.addEventListener('input', () => {
+        booksDisplayedCount = 6;
+        renderBooks();
+    });
+
+    seeMoreText.addEventListener('click', () => {
+        booksDisplayedCount += 6;
+        renderBooks();
+    });
 	
 	document.addEventListener('DOMContentLoaded', () => {
         if (!localStorage.getItem('books')) {
-            const initialBooks = [
-                {
-                    id: 'book1',
-                    title: 'O Pequeno Príncipe',
-                    author: 'Antoine de Saint-Exupéry',
-                    genre: ['Ficção'],
-                    cover: 'https://editorapaulus.vtexassets.com/arquivos/ids/158669/o-pequeno-principe-capa-flexivel.png',
-                    status: 'available',
-                    returnDate: null
-                },
-                {
-                    id: 'book2',
-                    title: 'Dom Casmurro',
-                    author: 'Machado de Assis',
-                    genre: ['Ficção', 'Romance'],
-                    cover: 'https://m.media-amazon.com/images/I/61Z2bMhGicL.jpg',
-                    status: 'available',
-                    returnDate: null
-                },
-                {
-                    id: 'book3',
-                    title: '1984',
-                    author: 'George Orwell',
-                    genre: ['Ficção', 'Ficção Científica'],
-                    cover: 'https://m.media-amazon.com/images/I/819js3EQwbL.jpg',
-                    status: 'available',
-                    returnDate: null
-                },
-                {
-                    id: 'book4',
-                    title: 'Sapiens: Uma Breve História da Humanidade',
-                    author: 'Yuval Noah Harari',
-                    genre: ['História', 'Não Ficção'],
-                    cover: 'https://m.media-amazon.com/images/I/81BTkpMrLYL.jpg',
-                    status: 'available',
-                    returnDate: null
-                },
-                {
-                    id: 'book5',
-                    title: 'O Hobbit',
-                    author: 'J.R.R. Tolkien',
-                    genre: ['Fantasia', 'Ficção'],
-                    cover: 'https://m.media-amazon.com/images/I/91M9xPIf10L.jpg',
-                    status: 'available',
-                    returnDate: null
-                },
-                {
-                    id: 'book6',
-                    title: 'Frankenstein',
-                    author: 'Mary Shelley',
-                    genre: ['Ficção Científica', 'Ficção'],
-                    cover: 'https://m.media-amazon.com/images/I/710p9SUfZtL._UF1000,1000_QL80_.jpg',
-                    status: 'available',
-                    returnDate: null
-                }
-            ];
-            saveBooks(initialBooks);
+            const initialBooks = []; // Dados iniciais podem ser adicionados aqui se necessário
+            saveData('books', initialBooks);
         }
 		
-		const allButton = document.querySelector('.filter-buttons button[data-filter="all"]');
-        if (allButton) {
-            allButton.classList.add('active');
-        }
+		document.querySelector('.filter-buttons button[data-filter="all"]').classList.add('active');
+        document.querySelector('.mobile-filter-item[data-filter="all"]').classList.add('active');
 
         renderBooks();
     });
