@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Biblioteca ETEC Darcy</title>
+    <link rel="icon" href="assets/imagens/aura.png" type="image/png">
     <style>
         body {
             font-family: sans-serif;
@@ -74,6 +75,13 @@
         const errorMessage = document.getElementById('errorMessage');
 
         // Credenciais de teste
+
+        document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('isLoggedIn') == 'true') {
+            window.location.href = 'secretaria.html';
+        }
+        });
+
         const TEST_EMAIL = "biblioteca@etecdarcy.com";
         const TEST_PASSWORD = "senha123";
 
@@ -84,7 +92,7 @@
             if (email === TEST_EMAIL && password === TEST_PASSWORD) {
                 // Login bem-sucedido: Salva um indicador no LocalStorage e redireciona
                 localStorage.setItem('isLoggedIn', 'true');
-                window.location.href = 'index.html'; // Redireciona para a página principal
+                window.location.href = 'secretaria.html'; // Redireciona para a página principal
             } else {
                 errorMessage.style.display = 'block'; // Mostra mensagem de erro
             }
