@@ -5,67 +5,203 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Biblioteca ETEC Darcy</title>
     <link rel="icon" href="assets/imagens/aura.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            background-color: #f5f5dc; /* Bege Claro/Areia */
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+    /* Importa as fontes do Google Fonts, como no seu style.css principal */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500;600&display=swap');
+
+    /* Variáveis de cor e fonte (copiadas do seu style.css principal para consistência) */
+    :root {
+        --cor-destaque: #4A6349; /* Verde mais escuro */
+        --cor-secundaria: #A0B99F; /* Verde claro */
+        --cor-principal: #C8D8BF; /* Verde muito claro */
+        --cor-fundo: #f8f9fa; /* Fundo padrão */
+        --cor-branco: #ffffff;
+        --cor-texto: #212529; /* Texto escuro */
+        --cor-texto-claro: #f8f9fa; /* Texto claro (para fundos escuros) */
+        --cor-sucesso: #28a745;
+        --cor-erro: #dc3545;
+        --cor-aviso: #ffc107;
+        --cor-cinza: #6c757d;
+        --cor-cinza-claro: #ddd;
+        
+        --font-heading: 'Montserrat', sans-serif;
+        --font-body: 'Poppins', sans-serif;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: var(--font-body);
+        background: linear-gradient(to right, var(--cor-principal), var(--cor-secundaria)); /* Gradiente de fundo */
+        color: var(--cor-texto);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden; /* Evita scroll desnecessário */
+    }
+
+    .login-wrapper {
+        background-color: var(--cor-branco);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        text-align: center;
+        width: 90%;
+        max-width: 450px; /* Um pouco maior para um visual mais robusto */
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-wrapper::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        left: -50px;
+        width: 150px;
+        height: 150px;
+        background-color: var(--cor-destaque);
+        border-radius: 50%;
+        opacity: 0.1;
+        transform: rotate(45deg);
+    }
+    .login-wrapper::after {
+        content: '';
+        position: absolute;
+        bottom: -50px;
+        right: -50px;
+        width: 150px;
+        height: 150px;
+        background-color: var(--cor-secundaria);
+        border-radius: 50%;
+        opacity: 0.1;
+        transform: rotate(45deg);
+    }
+
+    .login-header {
+    margin-bottom: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* Voltar para uma cor mais suave ou remover, dependendo do que prefere */
+    background-color: var(--cor-principal); /* Ou remova esta linha se quiser branco total */
+    border-radius: 10px 10px 0 0; /* Manter se gostou */
+}
+
+.login-header img {
+    width: 70px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 15px;
+    /* Aumentar a sombra para destacar o logo branco */
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.3)); /* NOVO: Sombra mais espalhada e visível */
+    /* Outras opções de sombra: */
+    /* filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)) drop-shadow(0 0 0 1px rgba(0,0,0,0.1)); */
+    /* filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.2)); */
+}
+
+    .login-header h2 {
+        font-family: var(--font-heading);
+        font-size: 1.5em;
+        color: var(--cor-destaque);
+        margin: 0;
+    }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    .form-group i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--cor-cinza);
+        font-size: 1.1em;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 15px 15px 15px 50px; /* Aumenta o padding para o ícone */
+        border: 1px solid var(--cor-cinza-claro);
+        border-radius: 8px;
+        font-size: 1em;
+        background-color: var(--cor-fundo);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: var(--cor-destaque);
+        box-shadow: 0 0 0 3px rgba(74, 99, 73, 0.2); /* Sombra sutil ao focar */
+    }
+    
+    .login-btn {
+        background-color: var(--cor-destaque);
+        color: var(--cor-branco);
+        padding: 15px 30px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1.1em;
+        font-weight: 600;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        width: 100%;
+        box-shadow: 0 4px 10px rgba(74, 99, 73, 0.3);
+    }
+
+    .login-btn:hover {
+        background-color: #3a5039; /* Um tom mais escuro do verde destaque */
+        transform: translateY(-2px);
+    }
+
+    .error-message {
+        color: var(--cor-erro);
+        margin-top: 20px;
+        font-size: 0.95em;
+        display: none;
+    }
+
+    /* Responsividade básica */
+    @media (max-width: 500px) {
+        .login-wrapper {
+            padding: 30px 20px;
         }
-        .login-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
+        .login-header h2 {
+            font-size: 1.3em;
         }
-        .login-container h2 {
-            color: #8B4513; /* Marrom Avelã */
-            margin-bottom: 25px;
+        .form-group input {
+            padding: 12px 12px 12px 45px;
         }
-        .login-container input[type="email"],
-        .login-container input[type="password"] {
-            width: calc(100% - 20px);
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        .login-btn {
+            padding: 12px 20px;
             font-size: 1em;
         }
-        .login-container button {
-            background-color: #add8e6; /* Azul Sereno */
-            color: #8B4513; /* Marrom Avelã */
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        .login-container button:hover {
-            background-color: #9acde0; /* Azul Sereno mais escuro */
-        }
-        .error-message {
-            color: red;
-            margin-top: 10px;
-            display: none;
-        }
-    </style>
+    }
+</style>                        
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login da Bibliotecária</h2>
-        <input type="email" id="adminEmail" placeholder="E-mail" required>
-        <input type="password" id="adminPassword" placeholder="Senha" required>
-        <button id="loginBtn">Entrar</button>
-        <p id="errorMessage" class="error-message">E-mail ou senha incorretos.</p>
+    <div class="login-wrapper">
+        <div class="login-header">
+            <img src="assets/imagens/aura.png" alt="Logo da Biblioteca">
+            <h2>Login da Bibliotecária</h2>
+        </div>
+        <div class="form-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="adminEmail" placeholder="E-mail" required>
+        </div>
+        <div class="form-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="adminPassword" placeholder="Senha" required>
+        </div>
+        <button id="loginBtn" class="login-btn">Entrar</button>
+        <p id="errorMessage" class="error-message">E-mail ou senha incorretos. Por favor, tente novamente.</p>
     </div>
 
     <script>
@@ -75,11 +211,10 @@
         const errorMessage = document.getElementById('errorMessage');
 
         // Credenciais de teste
-
         document.addEventListener('DOMContentLoaded', () => {
-        if (localStorage.getItem('isLoggedIn') == 'true') {
-            window.location.href = 'secretaria.html';
-        }
+            if (localStorage.getItem('isLoggedIn') == 'true') {
+                window.location.href = 'secretaria.html';
+            }
         });
 
         const TEST_EMAIL = "biblioteca@etecdarcy.com";
