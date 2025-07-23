@@ -3,1147 +3,502 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Administrativo - Biblioteca ETEC Darcy</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Biblioteca ETEC Darcy - Empréstimo de Livros</title>
     <link rel="icon" href="assets/imagens/aura.png" type="image/png">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500;600&display=swap');
+/* Estilos básicos para ver a estrutura - serão refinados no CSS */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #E0D8B0; /* Bege Mais Profundo */
+    color: #333;
+}
+header {
+    background-color: #C8D8BF; /* Verde Sálvia */
+    color: #333;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+.btn-login {
+    background-color: #8B4513; /* Marrom Avelã */
+    color: white;
+    padding: 8px 15px;
+    margin-right: 6vh;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.search-filter-section {
+    background-color: #A0B99F; /* Verde Oliva Suave/Musgo */
+    padding: 20px;
+    text-align: center;
+    border-radius: 0 0 10px 10px;
+}
+.search-filter-section input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 70%;
+    max-width: 400px;
+    margin-right: 10px;
+}
+.filter-buttons button {
+    background-color: #8B4513;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+}
+.book-list-container {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+.book-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.book-card img {
+    max-width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+}
+.book-card h3 {
+    margin-top: 0;
+    color: #C8D8BF; /* Verde Sálvia */
+}
+.book-card p {
+    font-size: 0.9em;
+    color: #555;
+}
+.book-status {
+    font-weight: bold;
+    color: green; /* Será dinâmico via JS */
+    margin-bottom: 10px;
+}
+.btn-emprestar {
+    background-color: #A0B99F; /* Verde Oliva Suave/Musgo */
+    color: #8B4513; /* Marrom Avelã */
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+footer {
+    background-color: #A0B99F; /* Marrom Avelã */
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+}
 
-        :root {
-            /* Paleta de Cores Verde com Alto Contraste */
-            --cor-destaque: #4A6349;
-            --cor-secundaria: #A0B99F;
-            --cor-principal: #C8D8BF;
-            
-            /* Cores Neutras e de Status */
-            --cor-fundo: #f8f9fa;
-            --cor-branco: #ffffff;
-            --cor-texto: #212529;
-            --cor-texto-claro: #f8f9fa;
-            --cor-sucesso: #28a745;
-            --cor-erro: #dc3545;
-            --cor-aviso: #ffc107;
-            --cor-cinza: #6c757d;
-            --cor-cinza-claro: #ddd;
-            
-            /* Fontes */
-            --font-heading: 'Montserrat', sans-serif;
-            --font-body: 'Poppins', sans-serif;
-        }
+/* Modal de Empréstimo */
+.modal {
+    display: none; /* Escondido por padrão */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+.modal.show {
+    display: flex; /* Exibido quando a classe 'show' é adicionada */
+}
+.modal-content {
+    background-color: #FCFBF7; /* Off-white suave - NOVO */
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+}
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.modal-content input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.modal-content button {
+    background-color: #A0B99F;
+    color: #8B4513;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+/* Estilo para os botões de filtro */
+.filter-buttons button {
+    background-color: #f0f0f0; /* Cor de fundo padrão */
+    color: #333; /* Cor do texto padrão */
+    border: 1px solid #ccc;
+    padding: 8px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    font-size: 0.9em;
+}
 
-        /* --- Estilo do Scrollbar Minimalista --- */
-        html {
-            scrollbar-gutter: stable; /* Previne o salto de layout */
-        }
-        /* Para Firefox */
-        * {
-            scrollbar-width: thin;
-            scrollbar-color: var(--cor-cinza) transparent;
-        }
-        /* Para Chrome, Safari e Edge */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background-color: var(--cor-cinza);
-            border-radius: 10px;
-            border: 2px solid var(--cor-fundo);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background-color: var(--cor-destaque);
-        }
+.filter-buttons button:hover {
+    background-color: #e0e0e0; /* Um pouco mais escuro ao passar o mouse */
+}
 
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: var(--font-body); background-color: var(--cor-fundo); color: var(--cor-texto); }
-        h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 700; }
-        input, button, select, textarea, .btn, .btn-public, .btn-logout, .tab-button { font-family: var(--font-body); }
-
-        .sidebar { width: 260px; background-color: var(--cor-destaque); color: var(--cor-texto-claro); display: flex; flex-direction: column; height: 100vh; position: fixed; left: 0; top: 0; transition: transform 0.3s ease-in-out; z-index: 1000; }
-        .sidebar-header { padding: 25px 20px; text-align: center; }
-        .sidebar-header h1 { font-size: 1.6em; margin: 0; color: var(--cor-branco); }
-        .sidebar-header i { font-size: 2.2em; margin-bottom: 12px; color: var(--cor-branco); opacity: 0.9; }
-        .nav-tabs { width: 100%; list-style: none; padding: 20px 15px; flex-grow: 1; }
-        .tab-button { padding: 15px 20px; border: none; border-radius: 10px; cursor: pointer; width: 100%; text-align: left; font-size: 1em; font-weight: 500; display: flex; align-items: center; gap: 15px; margin-bottom: 10px; position: relative; background-color: transparent; color: var(--cor-texto-claro); opacity: 0.8; transition: all 0.3s ease; }
-        .tab-button i { width: 20px; font-size: 1.1em; }
-        .tab-button:hover { background-color: rgba(0, 0, 0, 0.2); opacity: 1; }
-        .tab-button.active { background-color: var(--cor-fundo); color: var(--cor-destaque); font-weight: 600; opacity: 1; }
-        
-        .notification-badge {
-            position: absolute;
-            top: 50%;
-            right: 15px;
-            transform: translateY(-50%);
-            background-color: var(--cor-erro);
-            color: var(--cor-branco);
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 0.8em;
-            font-weight: bold;
-            display: none; /* Oculto por padrão */
-        }
-        .notification-badge.show {
-            display: flex;
-        }
-
-        .sidebar-footer { padding: 20px 15px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
-        .btn-public, .btn-logout { width: 100%; padding: 12px; border-radius: 8px; text-decoration: none; text-align: center; display: flex; justify-content: center; align-items: center; gap: 10px; color: var(--cor-branco); font-weight: 500; border: none; transition: background-color 0.3s ease, transform 0.2s ease; }
-        .btn-public { background-color: rgba(255,255,255,0.15); margin-bottom: 10px; }
-        .btn-public:hover { background-color: rgba(255,255,255,0.25); transform: translateY(-2px); }
-        .btn-logout { background-color: rgba(220, 53, 69, 0.6); cursor: pointer; }
-        .btn-logout:hover { background-color: rgba(220, 53, 69, 0.8); transform: translateY(-2px); }
-        .main-content { padding: 20px; margin-left: 260px; width: calc(100% - 260px); transition: margin-left 0.3s ease-in-out; }
-        .sidebar-toggle { display: none; position: fixed; top: 15px; left: 15px; z-index: 1001; background-color: var(--cor-branco); color: var(--cor-destaque); border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 1.2em; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 999; }
-        .overlay.show { display: block; }
-        
-        .page-header { margin-bottom: 30px; }
-        .page-title-container { display: flex; align-items: center; gap: 20px; }
-        #pageTitleIcon { font-size: 2.5em; color: var(--cor-destaque); background-color: var(--cor-branco); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
-        #pageTitle { margin: 0; font-size: 2.2em; }
-        #pageSubtitle { margin: 0; font-size: 1em; color: var(--cor-cinza); }
-
-        .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .admin-section { background-color: var(--cor-branco); padding: 25px 30px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
-        .admin-section h3 { margin-bottom: 25px; padding-bottom: 10px; border-bottom: 2px solid var(--cor-principal); font-size: 1.5em; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--cor-principal); margin-bottom: 25px; padding-bottom: 10px; }
-        .section-header h3 { margin: 0; border: none; padding: 0; }
-        .form-grid { flex-grow: 1; display: grid; grid-template-columns: 1fr; gap: 25px; }
-        .form-group { position: relative; }
-        .form-icon { position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: var(--cor-cinza-claro); transition: color 0.3s ease; z-index: 2; }
-        .form-input { width: 100%; padding: 14px 14px 14px 45px; border: 1px solid var(--cor-cinza-claro); border-radius: 8px; font-size: 1em; background-color: #f0f2f1; transition: border-color 0.3s ease; }
-        .form-label { position: absolute; top: 50%; left: 45px; transform: translateY(-50%); color: #999; background-color: #f0f2f1; padding: 0 5px; transition: all 0.3s ease; pointer-events: none; }
-        .form-input:focus { outline: none; border-color: var(--cor-destaque); }
-        .form-input:focus + .form-label, .form-input:not(:placeholder-shown) + .form-label { top: 0; font-size: 0.8em; color: var(--cor-destaque); }
-        .form-input:focus ~ .form-icon { color: var(--cor-destaque); }
-        .full-width-group { grid-column: 1 / -1; margin-top: 10px; }
-        .full-width-group > label { font-weight: 500; color: #555; display: block; margin-bottom: 15px; }
-        .genre-options { display: flex; flex-wrap: wrap; gap: 15px; }
-        .genre-options .checkbox-group { position: relative; }
-        .genre-options input[type="checkbox"] { opacity: 0; position: absolute; width: 0; height: 0; }
-        .genre-options .checkbox-label { display: inline-flex; align-items: center; gap: 8px; padding: 10px 15px; border: 1px solid var(--cor-cinza-claro); border-radius: 20px; cursor: pointer; transition: all 0.3s ease; }
-        .genre-options .checkbox-label:hover { border-color: var(--cor-secundaria); }
-        .genre-options input[type="checkbox"]:checked + .checkbox-label { background-color: var(--cor-principal); border-color: var(--cor-secundaria); color: var(--cor-texto); font-weight: 600; }
-        .file-group { display: flex; align-items: center; gap: 15px; }
-        input[type="file"] { display: none; }
-        .file-label { background-color: #e9ecef; color: var(--cor-texto); padding: 12px 20px; border-radius: 8px; cursor: pointer; transition: background-color 0.3s ease; display: inline-flex; align-items: center; gap: 10px; }
-        .file-label:hover { background-color: #dee2e6; }
-        .file-name { color: #6c757d; font-style: italic; }
-        
-        .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-        .btn-primary { background-color: var(--cor-secundaria); color: var(--cor-texto); }
-        .btn-primary.btn-lg { padding: 18.8px 25px; font-size: 1.1em; } 
-        .btn-success { background-color: var(--cor-sucesso); color: var(--cor-branco); }
-        .btn-danger { background-color: var(--cor-erro); color: var(--cor-branco); }
-        .btn-secondary { background-color: var(--cor-cinza); color: var(--cor-branco); }
-        
-        .table-container { width: 100%; overflow-x: auto; }
-        .data-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin-top: 10px; min-width: 600px; }
-        .data-table thead th { position: sticky; top: 0; background-color: var(--cor-destaque); color: var(--cor-texto-claro); z-index: 10;}
-        .data-table th, .data-table td { padding: 15px 20px; text-align: left; vertical-align: middle; }
-        .data-table thead th.sortable { cursor: pointer; }
-        .data-table thead th.sortable:hover { background-color: #3a5039; }
-        .data-table tbody tr { background-color: var(--cor-branco); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .data-table tbody tr:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .data-table th:first-child, .data-table td:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
-        .data-table th:last-child, .data-table td:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; text-align: right;}
-        .data-table th .fa-fw { margin-right: 8px; }
-        .sort-indicator { margin-left: 10px; opacity: 0.6; }
-        
-        .book-cover-thumbnail { width: 50px; height: 75px; object-fit: cover; border-radius: 4px; }
-        
-        .status-badge { padding: 5px 10px; border-radius: 15px; font-size: 0.8em; font-weight: 600; text-transform: capitalize; }
-        .status-badge.available { background-color: #e8f5e9; color: #388e3c; }
-        .status-badge.borrowed, .status-badge.pending { background-color: #fff3e0; color: #f57c00; }
-        .status-badge.on-time { background-color: #e9ecef; color: var(--cor-cinza); text-transform: none; }
-        .status-badge.overdue { background-color: var(--cor-erro); color: var(--cor-branco); text-transform: none; }
-        
-        .action-buttons { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
-        .btn-icon { background: none; border: none; padding: 5px; cursor: pointer; font-size: 1.2em; border-radius: 50%; width: 38px; height: 38px; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; }
-        .btn-icon:hover { background-color: var(--cor-fundo); transform: scale(1.1); }
-        .btn-icon .fa-pen-to-square { color: var(--cor-aviso); }
-        .btn-icon .fa-trash-can { color: var(--cor-erro); }
-        .btn-icon .fa-check-circle { color: var(--cor-sucesso); font-size: 1.4em; }
-        .btn-icon .fa-check-double { color: var(--cor-destaque); }
-        
-        .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .action-box h4 { font-size: 1.1em; font-weight: 600; color: var(--cor-texto); margin-bottom: 15px; }
-        .action-box .form-group { display: flex; align-items: center; }
-        .action-box .form-input { flex-grow: 1; margin-right: -1px; border-top-right-radius: 0; border-bottom-right-radius: 0; }
-        .action-box .btn-primary { border-top-left-radius: 0; border-bottom-left-radius: 0; }
-        .sub-tabs { display: flex; border-bottom: 2px solid var(--cor-cinza-claro); margin-bottom: 20px; }
-        .sub-tab-button { padding: 10px 20px; cursor: pointer; border: none; background: none; font-size: 1.1em; font-weight: 500; color: #888; position: relative; transition: color 0.3s ease; }
-        .sub-tab-button::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background-color: var(--cor-destaque); transform: scaleX(0); transition: transform 0.3s ease; }
-        .sub-tab-button.active { color: var(--cor-destaque); }
-        .sub-tab-button.active::after { transform: scaleX(1); }
-        .sub-tab-content { display: none; }
-        .sub-tab-content.active { display: block; }
-        
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.6); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
-        .modal-overlay.show { opacity: 1; visibility: visible; }
-        .modal-container { background-color: var(--cor-branco); border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); width: 100%; max-height: 90vh; overflow-y: auto; position: relative; transform: scale(0.95); transition: transform 0.3s ease; }
-        .modal-overlay.show .modal-container { transform: scale(1); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--cor-principal); }
-        .modal-header h3 { font-size: 1.5em; margin: 0; }
-        .modal-close-btn { background: none; border: none; font-size: 2em; cursor: pointer; color: #888; line-height: 1; padding: 0 5px; }
-        .modal-close-btn:hover { color: var(--cor-texto); }
-        .modal-body { padding: 25px 0; }
-        
-        #bookModal .modal-container { max-width: 800px; padding: 30px 40px; }
-        #bookModal .modal-header { margin-bottom: 25px; }
-        .edit-modal-layout { display: flex; gap: 30px; align-items: flex-start; }
-        .edit-modal-preview { flex-basis: 200px; flex-shrink: 0; border: 2px dashed var(--cor-cinza-claro); border-radius: 12px; padding: 10px; display: flex; justify-content: center; align-items: center; min-height: 300px; }
-        .edit-modal-preview img { max-width: 100%; height: auto; border-radius: 8px; }
-        .modal-body .full-width-group { margin-top: 25px; }
-
-        #confirmationModal .modal-container { max-width: 600px; padding: 30px; }
-        #confirmationModal .modal-header { margin-bottom: 20px; }
-        #confirmModalRichContent { display: flex; align-items: flex-start; gap: 25px; }
-        .confirm-modal-image img { width: 120px; height: auto; border-radius: 8px; background-color: var(--cor-fundo); }
-        .confirm-modal-details p { margin: 0 0 12px; font-size: 1.1em; line-height: 1.5; }
-        .confirm-modal-details p strong { color: var(--cor-destaque); }
-        #confirmModalSimpleMessage { font-size: 1.1em; line-height: 1.6; }
-
-        .modal-footer { padding-top: 20px; display: flex; justify-content: flex-end; gap: 15px; border-top: 1px solid var(--cor-principal); }
-        .modal-footer .btn { border-radius: 50px; padding: 10px 25px; }
-        
-        #notifications .admin-section { border-left: 5px solid var(--cor-aviso); }
-        #notifications .admin-section h3 .fa-bell { margin-right: 10px; }
-        .notification-item { display: flex; gap: 15px; align-items: flex-start; padding: 15px; border-bottom: 1px solid var(--cor-principal); transition: all 0.3s ease; position: relative;}
-        .notification-item:last-child { border-bottom: none; }
-        .notification-item .fa-exclamation-triangle { font-size: 1.5em; color: var(--cor-erro); margin-top: 5px; }
-        .mark-as-seen-btn { background-color: var(--cor-sucesso); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; position: absolute; top: 15px; right: 15px; display: flex; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
-        .notification-item:hover .mark-as-seen-btn { opacity: 1; }
-        .notification-item.seen { opacity: 0.6; background-color: #f7f7f7; }
-        .notification-item.seen .mark-as-seen-btn { display: none; }
-        
-        #addBookFab { display: none; }
-
-        @media (max-width: 992px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.show { transform: translateX(0); }
-            .main-content { margin-left: 0; width: 100%; padding: 15px; }
-            .sidebar-toggle { display: block; }
-            .page-header { padding-left: 60px; }
-            #pageTitle { font-size: 1.8em; }
-        }
-
-        @media (max-width: 768px) {
-            .section-header .btn-primary { display: none; }
-            #addBookFab {
-                display: flex;
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                width: 60px;
-                height: 60px;
-                border-radius: 50%;
-                background-color: var(--cor-destaque);
-                color: var(--cor-branco);
-                font-size: 1.5em;
-                justify-content: center;
-                align-items: center;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-                z-index: 998;
-            }
-
-            .edit-modal-layout { flex-direction: column; }
-            .edit-modal-preview { width: 100%; flex-basis: auto; min-height: 200px; }
-        }
-
+/* NOVO: Estilo para o botão de filtro ATIVO */
+.filter-buttons button.active {
+    background-color: #007bff; /* Cor principal, um azul vibrante */
+    color: white; /* Texto branco para contraste */
+    border-color: #007bff;
+    font-weight: bold; /* Opcional: deixar o texto em negrito */
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3); /* Sombra sutil para destaque */
+}
     </style>
 </head>
 <body>
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <i class="fas fa-book-bookmark"></i>
-            <h1>Biblioteca</h1>
-        </div>
-        <ul class="nav-tabs">
-            <li><button class="tab-button" data-tab="manageBooks"><i class="fas fa-atlas"></i><span>Gerenciar Livros</span></button></li>
-            <li><button class="tab-button" data-tab="manageLoans"><i class="fas fa-handshake"></i><span>Gerenciar Empréstimos</span></button></li>
-            <li><button class="tab-button" data-tab="notifications"><i class="fas fa-bell"></i><span>Notificações</span><span id="notificationCountBadge" class="notification-badge"></span></button></li>
-        </ul>
-        <div class="sidebar-footer">
-            <a href="index.html" class="btn-public"><i class="fas fa-eye"></i> Ver Catálogo</a>
-            <button id="adminLogoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Sair</button>
-        </div>
-    </aside>
+    <header>
+        <h1>Biblioteca ETEC Darcy</h1>
+        <button class="btn-login" id="adminLoginBtn">Login Bibliotecária</button>
+    </header>
 
-    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menu"><i class="fas fa-bars"></i></button>
-    <div class="overlay" id="overlay"></div>
-
-    <main class="main-content">
-        <section id="adminArea">
-            <div class="page-header">
-                <div class="page-title-container">
-                    <i id="pageTitleIcon"></i>
-                    <div>
-                        <h2 id="pageTitle"></h2>
-                        <p id="pageSubtitle"></p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="manageBooks" class="tab-content">
-                <div class="admin-section">
-                    <div class="section-header">
-                        <h3>Livros Cadastrados</h3>
-                        <button id="showAddBookModalBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Adicionar Livro</button>
-                    </div>
-                    <div class="table-container">
-                        <table class="data-table" id="currentBooksList">
-                            <thead>
-                                <tr>
-                                    <th class="sortable" data-sort="cover"><i class="fas fa-image fa-fw"></i>Capa<span class="sort-indicator"></span></th>
-                                    <th class="sortable" data-sort="title"><i class="fas fa-book fa-fw"></i>Título<span class="sort-indicator"></span></th>
-                                    <th class="sortable" data-sort="author"><i class="fas fa-user-edit fa-fw"></i>Autor<span class="sort-indicator"></span></th>
-                                    <th class="sortable" data-sort="status"><i class="fas fa-info-circle fa-fw"></i>Status<span class="sort-indicator"></span></th>
-                                    <th><i class="fas fa-cogs fa-fw"></i>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div id="manageLoans" class="tab-content">
-                 <div class="admin-section">
-                    <h3>Ações Rápidas</h3>
-                    <div class="actions-grid">
-                        <div class="action-box">
-                            <h4>Confirmar Retirada por Código</h4>
-                            <div class="form-group">
-                                <input type="text" id="loanCodeInput" class="form-input" placeholder="Digite o código">
-                                <button id="searchLoanCodeBtn" class="btn btn-primary"><i class="fas fa-check"></i></button>
-                            </div>
-                        </div>
-                        <div class="action-box">
-                            <h4>Registrar Devolução por Código/Nome</h4>
-                            <div class="form-group">
-                                <input type="text" id="returnBookCode" class="form-input" placeholder="Código ou nome do aluno">
-                                <button id="confirmReturnBtn" class="btn btn-primary"><i class="fas fa-undo-alt"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="admin-section">
-                    <div class="sub-tabs">
-                        <button class="sub-tab-button active" data-subtab="pending-loans-content">Solicitações Pendentes</button>
-                        <button class="sub-tab-button" data-subtab="active-loans-content">Livros Emprestados</button>
-                    </div>
-                    
-                    <div id="pending-loans-content" class="sub-tab-content active">
-                        <div class="table-container">
-                            <table class="data-table" id="pendingLoansTable">
-                                <thead>
-                                    <tr>
-                                        <th><i class="fas fa-user-graduate fa-fw"></i>Aluno</th>
-                                        <th><i class="fas fa-users fa-fw"></i>Turma</th>
-                                        <th><i class="fas fa-book fa-fw"></i>Livro</th>
-                                        <th><i class="fas fa-barcode fa-fw"></i>Código</th>
-                                        <th><i class="fas fa-cogs fa-fw"></i>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div id="active-loans-content" class="sub-tab-content">
-                         <div class="table-container">
-                            <table class="data-table" id="activeLoansTable">
-                                <thead>
-                                    <tr>
-                                        <th><i class="fas fa-book-open fa-fw"></i>Livro</th>
-                                        <th><i class="fas fa-user-graduate fa-fw"></i>Aluno</th>
-                                        <th><i class="fas fa-calendar-day fa-fw"></i>Retirada</th>
-                                        <th><i class="fas fa-calendar-check fa-fw"></i>Devolução Prevista</th>
-                                        <th><i class="fas fa-flag fa-fw"></i>Status</th>
-                                        <th><i class="fas fa-cogs fa-fw"></i>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="notifications" class="tab-content">
-                <div class="admin-section">
-                    <h3><i class="fas fa-bell"></i> Empréstimos Atrasados</h3>
-                    <div id="notificationsList"></div>
-                </div>
-            </div>
-
+    <main>
+        <section class="search-filter-section">
+            <input type="text" id="searchInput" placeholder="Pesquisar por título, autor, etc.">
+            <div class="filter-buttons">
+    <button data-filter="all">Todos</button>
+    <button data-filter="available">Disponíveis</button>
+    <button data-filter="Ficção">Ficção</button>
+    <button data-filter="Fantasia">Fantasia</button>
+    <button data-filter="Ficção Científica">Ficção Científica</button>
+    <button data-filter="Mistério">Mistério</button>
+    <button data-filter="Romance">Romance</button>
+    <button data-filter="Biografia">Biografia</button>
+    <button data-filter="História">História</button>
+    <button data-filter="Outros">Outros</button>
+</div>
         </section>
-        <button id="addBookFab" class="btn btn-icon" title="Adicionar Livro"><i class="fas fa-plus"></i></button>
+
+        <section class="book-list-container" id="bookList">
+            </section>
+
+        <div id="loanModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Solicitar Empréstimo</h2>
+                <p>Você está solicitando o livro: <strong id="modalBookTitle"></strong></p>
+                <input type="text" id="studentName" placeholder="Seu Nome Completo" required>
+                <input type="text" id="studentClass" placeholder="Sua Turma (Ex: 1º ETIM Informática)" required>
+                <button id="confirmLoanBtn">Confirmar Empréstimo</button>
+                <p id="loanCodeDisplay" style="margin-top: 15px; font-weight: bold; color: green; display: none;"></p>
+                <p style="font-size: 0.8em; margin-top: 10px;">Lembre-se: o prazo de devolução é de 30 dias a partir da retirada na secretaria.</p>
+            </div>
+        </div>
+
     </main>
-    
-    <div class="modal-overlay" id="bookModal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3 id="modalTitle">Adicionar Novo Livro</h3>
-                <button class="modal-close-btn">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="edit-modal-layout">
-                    <div class="edit-modal-preview">
-                        <img id="bookModalCoverPreview" src="" alt="Pré-visualização da Capa">
-                    </div>
-                    <div class="form-grid">
-                         <div class="form-group">
-                             <i class="fas fa-book form-icon"></i>
-                            <input type="text" id="newBookTitle" class="form-input" placeholder=" " required>
-                            <label for="newBookTitle" class="form-label">Título do Livro</label>
-                        </div>
-                        <div class="form-group">
-                            <i class="fas fa-user-edit form-icon"></i>
-                            <input type="text" id="newBookAuthor" class="form-input" placeholder=" " required>
-                             <label for="newBookAuthor" class="form-label">Autor</label>
-                        </div>
-                        
-                        <div class="form-group">
-                             <i class="fas fa-link form-icon"></i>
-                            <input type="text" id="newBookCoverURL" class="form-input" placeholder=" ">
-                             <label for="newBookCoverURL" class="form-label">URL da Imagem de Capa</label>
-                        </div>
-                        <div class="form-group file-group">
-                            <label for="newBookCoverFile" class="file-label">
-                                <i class="fas fa-upload"></i>
-                                <span>Selecionar Arquivo</span>
-                            </label>
-                            <input type="file" id="newBookCoverFile" accept="image/*">
-                            <span id="fileNameDisplay" class="file-name"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="full-width-group">
-                    <label>Gêneros</label>
-                    <div class="genre-options">
-                        <div class="checkbox-group"><input type="checkbox" id="genreFiction" name="bookGenre" value="Ficção"><label class="checkbox-label" for="genreFiction">Ficção</label></div>
-                        <div class="checkbox-group"><input type="checkbox" id="genreFantasy" name="bookGenre" value="Fantasia"><label class="checkbox-label" for="genreFantasy">Fantasia</label></div>
-                        <div class="checkbox-group"><input type="checkbox" id="genreScifi" name="bookGenre" value="Ficção Científica"><label class="checkbox-label" for="genreScifi">Ficção Científica</label></div>
-                        <div class="checkbox-group"><input type="checkbox" id="genreMystery" name="bookGenre" value="Mistério"><label class="checkbox-label" for="genreMystery">Mistério</label></div>
-                        <div class="checkbox-group"><input type="checkbox" id="genreRomance" name="bookGenre" value="Romance"><label class="checkbox-label" for="genreRomance">Romance</label></div>
-                        <div class="checkbox-group"><input type="checkbox" id="genreBiography" name="bookGenre" value="Biografia"><label class="checkbox-label" for="genreBiography">Biografia</label></div>
-                        <div class="checkbox-group"><input type="checkbox" id="genreHistory" name="bookGenre" value="História"><label class="checkbox-label" for="genreHistory">História</label></div>
-                        <div class="checkbox-group"><input type="checkbox" id="genreOthers" name="bookGenre" value="Outros"><label class="checkbox-label" for="genreOthers">Outros</label></div>
-                    </div>
-                </div>
-                <button id="addBookBtn" class="btn btn-primary btn-lg" style="margin-top: 30px; width: 100%;"><i class="fas fa-plus"></i> Adicionar Livro</button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="modal-overlay" id="confirmationModal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3 id="confirmModalTitle"></h3>
-                <button class="modal-close-btn">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="confirmModalSimpleMessage"></div>
-                <div id="confirmModalRichContent">
-                    <div class="confirm-modal-image">
-                        <img id="confirmModalBookCover" src="" alt="Capa do Livro">
-                    </div>
-                    <div class="confirm-modal-details">
-                        <p><strong>Aluno:</strong> <span id="confirmModalStudentName"></span></p>
-                        <p><strong>Livro:</strong> <span id="confirmModalBookTitle"></span></p>
-                        <p><strong>Código:</strong> <span id="confirmModalLoanCode"></span></p>
-                        <p><strong>Data de Retirada:</strong> <span id="confirmModalPickupDate"></span></p>
-                        <p><strong>Devolver até:</strong> <span id="confirmModalReturnDate"></span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="confirmModalBtnCancel" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</button>
-                <button id="confirmModalBtnConfirm" class="btn"><i class="fas fa-check"></i> Confirmar</button>
-            </div>
-        </div>
-    </div>
 
+    <footer>
+        <p>Feito com ❤️ por Aura</p>
+    </footer>
+</body>
+</html>
 
-<script>
-    const adminArea = document.getElementById('adminArea');
-    const adminLogoutBtn = document.getElementById('adminLogoutBtn');
-    const loanCodeInput = document.getElementById('loanCodeInput');
-    const searchLoanCodeBtn = document.getElementById('searchLoanCodeBtn');
-    const returnBookCodeInput = document.getElementById('returnBookCode');
-    const confirmReturnBtn = document.getElementById('confirmReturnBtn');
-    const newBookTitleInput = document.getElementById('newBookTitle');
-    const newBookAuthorInput = document.getElementById('newBookAuthor');
-    const newBookCoverURLInput = document.getElementById('newBookCoverURL');
-    const newBookCoverFileInput = document.getElementById('newBookCoverFile');
-    const addBookBtn = document.getElementById('addBookBtn');
-    const currentBooksTableBody = document.querySelector('#currentBooksList tbody');
-    const currentBooksTableHead = document.querySelector('#currentBooksList thead');
-    const tabButtons = document.querySelectorAll('.tab-button');
-    const tabContents = document.querySelectorAll('.tab-content');
-    const pageTitle = document.getElementById('pageTitle');
-    const pageSubtitle = document.getElementById('pageSubtitle');
-    const pageTitleIcon = document.getElementById('pageTitleIcon');
-    const fileNameDisplay = document.getElementById('fileNameDisplay');
-    const sidebar = document.getElementById('sidebar');
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const overlay = document.getElementById('overlay');
-    const subTabButtons = document.querySelectorAll('.sub-tab-button');
-    const subTabContents = document.querySelectorAll('.sub-tab-content');
-    const pendingLoansTableBody = document.querySelector('#pendingLoansTable tbody');
-    const activeLoansTableBody = document.querySelector('#activeLoansTable tbody');
-    const bookModal = document.getElementById('bookModal');
-    const showAddBookModalBtn = document.getElementById('showAddBookModalBtn');
-    const addBookFab = document.getElementById('addBookFab');
-    const modalTitle = document.getElementById('modalTitle');
-    const bookModalPreviewContainer = document.querySelector('.edit-modal-preview');
-    const bookModalCoverPreview = document.getElementById('bookModalCoverPreview');
-    const confirmationModal = document.getElementById('confirmationModal');
-    const confirmModalTitle = document.getElementById('confirmModalTitle');
-    const confirmModalSimpleMessage = document.getElementById('confirmModalSimpleMessage');
-    const confirmModalRichContent = document.getElementById('confirmModalRichContent');
-    const confirmModalBtnConfirm = document.getElementById('confirmModalBtnConfirm');
-    const confirmModalBtnCancel = document.getElementById('confirmModalBtnCancel');
-    const notificationCountBadge = document.getElementById('notificationCountBadge');
-    const notificationsList = document.getElementById('notificationsList');
+ <script>
+    localStorage.removeItem("books")
+    // --- Variáveis Globais e Seletores de Elementos ---
+    const loanModal = document.getElementById('loanModal');
+    const closeButton = document.querySelector('.close-button');
+    const confirmLoanBtn = document.getElementById('confirmLoanBtn');
+    const modalBookTitle = document.getElementById('modalBookTitle');
+    const studentNameInput = document.getElementById('studentName');
+    const studentClassInput = document.getElementById('studentClass');
+    const loanCodeDisplay = document.getElementById('loanCodeDisplay');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const bookListContainer = document.getElementById('bookList');
 
-    const placeholderImg = 'https://placehold.co/120x180?text=Sem+Foto';
-    let editingBookId = null;
-    let currentSort = { key: 'title', direction: 'asc' };
+    // VARIÁVEIS PARA FILTROS DE PESQUISA
+    const searchInput = document.getElementById('searchInput');
+    const filterButtons = document.querySelectorAll('.filter-buttons button');
 
-    const pageInfo = {
-        manageBooks: {
-            title: 'Gerenciar Livros',
-            subtitle: 'Adicione, edite e visualize os livros do acervo.',
-            icon: 'fas fa-atlas'
-        },
-        manageLoans: {
-            title: 'Gerenciar Empréstimos',
-            subtitle: 'Acompanhe as solicitações e devoluções.',
-            icon: 'fas fa-handshake'
-        },
-        notifications: {
-            title: 'Notificações',
-            subtitle: 'Verifique os empréstimos com devolução atrasada.',
-            icon: 'fas fa-bell'
-        }
-    };
+    let currentBookId = null; // Usado para empréstimo
+    let activeGenreFilter = 'all'; // 'all', 'available', 'Ficção', 'Fantasia', etc.
 
-    const statusTranslations = {
-        available: 'Disponível',
-        borrowed: 'Emprestado',
-        pending: 'Pendente'
-    };
-
-    // --- Funções de Lógica Principal ---
-    function loadData(key) { return JSON.parse(localStorage.getItem(key)) || []; }
-    function saveData(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
-    function generateUniqueId() { return Date.now().toString(36) + Math.random().toString(36).substr(2); }
-
-    function renderAll() {
-        renderBooksAdmin();
-        renderLoans();
+    // --- Funções de Gerenciamento de Dados (Livros) ---
+    function loadBooks() {
+        const books = JSON.parse(localStorage.getItem('books')) || [];
+        return books;
     }
 
-    // --- Funções de Renderização ---
-    function renderBooksAdmin() {
-        let books = loadData('books');
-        
-        // Lógica de Ordenação
-        books.sort((a, b) => {
-            let valA = a[currentSort.key];
-            let valB = b[currentSort.key];
-            
-            // Tratamento especial para a coluna "Capa" (ordena por título)
-            if (currentSort.key === 'cover') {
-                valA = a.title;
-                valB = b.title;
-            }
+    function saveBooks(books) {
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+	
+	function generateUniqueId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
 
-            let comparison = 0;
-            if (valA > valB) {
-                comparison = 1;
-            } else if (valA < valB) {
-                comparison = -1;
-            }
-            return currentSort.direction === 'desc' ? (comparison * -1) : comparison;
-        });
-        
-        // Atualiza indicadores visuais da ordenação no cabeçalho
-        currentBooksTableHead.querySelectorAll('th.sortable').forEach(th => {
-            const indicator = th.querySelector('.sort-indicator');
-            if (th.dataset.sort === currentSort.key) {
-                indicator.innerHTML = currentSort.direction === 'asc' ? '<i class="fas fa-arrow-up"></i>' : '<i class="fas fa-arrow-down"></i>';
-            } else {
-                indicator.innerHTML = '';
-            }
-        });
+    // --- Funções de Gerenciamento de Dados (Empréstimos) ---
+    function loadLoans() {
+        const loans = JSON.parse(localStorage.getItem('loans')) || [];
+        return loans;
+    }
 
-        currentBooksTableBody.innerHTML = '';
-        if (books.length === 0) {
-            currentBooksTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhum livro cadastrado.</td></tr>';
-            return;
-        }
-        books.forEach(book => {
-            const row = document.createElement('tr');
-            const statusText = statusTranslations[book.status] || book.status;
-            row.innerHTML = `
-                <td><img src="${book.cover || placeholderImg.replace('120x180', '40x60')}" alt="Capa" class="book-cover-thumbnail" onerror="this.onerror=null; this.src='${placeholderImg.replace('120x180', '40x60')}';"></td>
-                <td>${book.title}</td>
-                <td>${book.author}</td>
-                <td><span class="status-badge ${book.status}">${statusText}</span></td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="btn-icon" data-action="edit" data-book-id="${book.id}" title="Editar Livro"><i class="fas fa-pen-to-square"></i></button>
-                        <button class="btn-icon" data-action="delete" data-book-id="${book.id}" title="Excluir Livro"><i class="fas fa-trash-can"></i></button>
+    function saveLoans(loans) {
+        localStorage.setItem('loans', JSON.stringify(loans));
+    }
+
+    // --- Funções para Renderizar Livros na UI ---
+    function renderBooks() {
+        const books = loadBooks();
+        bookListContainer.innerHTML = '';
+
+        const filteredBooks = applyFilters(books);
+
+        if (filteredBooks.length === 0) {
+            bookListContainer.innerHTML = '<p style="text-align: center; margin-top: 50px;">Nenhum livro encontrado com os filtros selecionados.</p>';
+        } else {
+            filteredBooks.forEach(book => {
+                const bookCard = `
+                    <div class="book-card" data-book-id="${book.id}" data-book-title="${book.title}" data-book-author="${book.author}" data-book-genre="${book.genre}" data-book-status="${book.status}">
+                        <img src="${book.cover || 'https://placehold.co/100x150?text=Sem+Foto'}" alt="Capa do Livro: ${book.title}" onerror="this.onerror=null;this.src='https://placehold.co/100x150?text=Sem+Foto';">
+                        <h3>${book.title}</h3>
+                        <p>Autor: ${book.author}</p>
+                        <p class="book-status">${book.status === 'available' ? 'Disponível' : `Emprestado`}</p>
+                        <button class="btn-emprestar" ${book.status !== 'available' ? 'disabled' : ''}>Emprestar</button>
                     </div>
-                </td>
-            `;
-            currentBooksTableBody.appendChild(row);
+                `;
+                bookListContainer.insertAdjacentHTML('beforeend', bookCard);
+            });
+        }
+        
+        document.querySelectorAll('.btn-emprestar').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const bookCard = event.target.closest('.book-card');
+                const bookTitle = bookCard.querySelector('h3').textContent;
+                const bookId = bookCard.dataset.bookId;
+                openLoanModal(bookTitle, bookId);
+            });
         });
     }
-    
-    function renderLoans() { /* ... código da função inalterado ... */ }
-    function updatePageHeader(tabKey) { /* ... código da função inalterado ... */ }
-    function switchToTab(tabKey) { /* ... código da função inalterado ... */ }
-    function showConfirmationModal({ title, message, details, confirmText = 'Confirmar', confirmClass = 'btn-success' }) { /* ... código da função inalterado ... */ }
-    async function confirmLoan(loanId) { /* ... código da função inalterado ... */ }
-    async function returnLoan(loanId) { /* ... código da função inalterado ... */ }
+
+    // --- Função para Aplicar Filtros ---
+    function applyFilters(books) {
+        let filteredBooks = [...books];
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        if (searchTerm) {
+            filteredBooks = filteredBooks.filter(book =>
+                book.title.toLowerCase().includes(searchTerm) ||
+                book.author.toLowerCase().includes(searchTerm)
+            );
+        }
+
+        if (activeGenreFilter === 'available') {
+            filteredBooks = filteredBooks.filter(book => book.status === 'available');
+        } else if (activeGenreFilter !== 'all') {
+            filteredBooks = filteredBooks.filter(book => {
+                if (Array.isArray(book.genre)) {
+                    return book.genre.includes(activeGenreFilter);
+                } else {
+                    return book.genre === activeGenreFilter;
+                }
+            });
+        }
+        return filteredBooks;
+    }
+
+    // --- Funções para o Modal de Empréstimo ---
+    function openLoanModal(bookTitle, bookId) {
+        modalBookTitle.textContent = bookTitle;
+        currentBookId = bookId;
+        loanCodeDisplay.style.display = 'none';
+        loanCodeDisplay.textContent = '';
+        studentNameInput.value = '';
+        studentClassInput.value = '';
+        confirmLoanBtn.disabled = false;
+        loanModal.classList.add('show');
+    }
+
+    function closeLoanModal() {
+        loanModal.classList.remove('show');
+    }
 
     // --- Event Listeners ---
-    document.addEventListener('DOMContentLoaded', () => {
-        if (localStorage.getItem('isLoggedIn') !== 'true') {
-            document.body.innerHTML = '';
-            window.location.href = 'admin_login.html';
-            return;
-        }
-        
-        adminArea.style.display = 'block';
-        
-        const urlParams = new URLSearchParams(window.location.search);
-        const page = urlParams.get('page');
-        const validTabs = Object.keys(pageInfo);
-        const initialTab = validTabs.includes(page) ? page : 'manageBooks';
-        
-        switchToTab(initialTab);
-        renderAll();
-
-        const isMobile = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        if (isMobile()) {
-            const fileInput = document.getElementById('newBookCoverFile');
-            const fileLabel = document.querySelector('label[for="newBookCoverFile"]');
-            if (fileLabel) {
-                const icon = fileLabel.querySelector('i');
-                const text = fileLabel.querySelector('span');
-                icon.className = 'fas fa-camera';
-                text.textContent = 'Tirar Foto';
-                fileInput.setAttribute('capture', 'environment');
-            }
+    closeButton.addEventListener('click', closeLoanModal);
+    window.addEventListener('click', (event) => {
+        if (event.target === loanModal) {
+            closeLoanModal();
         }
     });
 
-    window.addEventListener('popstate', () => { /* ... código da função inalterado ... */ });
-    tabButtons.forEach(button => { /* ... código da função inalterado ... */ });
-    
-    const openAddBookModal = () => {
-        modalTitle.textContent = 'Adicionar Novo Livro';
-        addBookBtn.innerHTML = '<i class="fas fa-plus"></i> Adicionar Livro';
-        editingBookId = null;
-        newBookTitleInput.value = '';
-		newBookAuthorInput.value = '';
-		newBookCoverURLInput.value = '';
-		newBookCoverFileInput.value = '';
-        fileNameDisplay.textContent = '';
-		document.querySelectorAll('.genre-options input').forEach(cb => cb.checked = false);
-        bookModalPreviewContainer.style.display = 'none';
-        bookModalCoverPreview.src = '';
-        bookModal.classList.add('show');
-    };
-    showAddBookModalBtn.addEventListener('click', openAddBookModal);
-    addBookFab.addEventListener('click', openAddBookModal);
-
-	addBookBtn.addEventListener('click', async () => { /* ... código da função inalterado ... */ });
-	currentBooksTableBody.addEventListener('click', async (event) => { /* ... código da função inalterado ... */ });
-    newBookCoverURLInput.addEventListener('input', () => { /* ... código da função inalterado ... */ });
-    newBookCoverFileInput.addEventListener('change', () => { /* ... código da função inalterado ... */ });
-	searchLoanCodeBtn.addEventListener('click', () => { /* ... código da função inalterado ... */ });
-    document.getElementById('manageLoans').addEventListener('click', (e) => { /* ... código da função inalterado ... */ });
-	confirmReturnBtn.addEventListener('click', () => { /* ... código da função inalterado ... */ });
-    notificationsList.addEventListener('click', (e) => { /* ... código da função inalterado ... */ });
-    adminLogoutBtn.addEventListener('click', () => { /* ... código da função inalterado ... */ });
-    subTabButtons.forEach(button => { /* ... código da função inalterado ... */ });
-    sidebarToggle.addEventListener('click', () => { /* ... código da função inalterado ... */ });
-    overlay.addEventListener('click', () => { /* ... código da função inalterado ... */ });
-    currentBooksTableHead.addEventListener('click', (e) => {
-        const header = e.target.closest('th.sortable');
-        if (!header) return;
-
-        const sortKey = header.dataset.sort;
-        if (currentSort.key === sortKey) {
-            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
-        } else {
-            currentSort.key = sortKey;
-            currentSort.direction = 'asc';
+    confirmLoanBtn.addEventListener('click', () => {
+        const studentName = studentNameInput.value.trim();
+        const studentClass = studentClassInput.value.trim();
+        if (studentName === '' || studentClass === '') {
+            alert('Por favor, preencha seu nome e turma para prosseguir.');
+            return;
         }
-        renderBooksAdmin();
+
+        const loanCode = `ETEC-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+        const newLoan = {
+            id: generateUniqueId(),
+            bookId: currentBookId,
+            studentName: studentName,
+            studentClass: studentClass,
+            loanCode: loanCode,
+            loanDate: new Date().toISOString(),
+            pickupDate: null,
+            returnDate: null,
+            status: 'pending'
+        };
+
+        const loans = loadLoans();
+        loans.push(newLoan);
+        saveLoans(loans);
+		
+		let books = loadBooks();
+		books = books.map(book => {
+			if(book.id === currentBookId) {
+				return {...book, status: 'pending'}
+			}
+			return book;
+		});
+		saveBooks(books);
+
+        loanCodeDisplay.innerHTML = `Seu código de retirada: <br><strong>${loanCode}</strong><br>Anote este código para apresentar na secretaria.`;
+        loanCodeDisplay.style.display = 'block';
+		confirmLoanBtn.disabled = true;
+
+        renderBooks();
+    });
+
+    adminLoginBtn.addEventListener('click', () => {
+        window.location.href = 'admin_login.html';
+    });
+	
+	filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            activeGenreFilter = button.dataset.filter;
+            renderBooks();
+        });
+    });
+
+    searchInput.addEventListener('input', renderBooks);
+	
+	document.addEventListener('DOMContentLoaded', () => {
+        if (!localStorage.getItem('books')) {
+            const initialBooks = [
+                {
+                    id: 'book1',
+                    title: 'O Pequeno Príncipe',
+                    author: 'Antoine de Saint-Exupéry',
+                    genre: ['Ficção'],
+                    cover: 'https://editorapaulus.vtexassets.com/arquivos/ids/158669/o-pequeno-principe-capa-flexivel.png',
+                    status: 'available',
+                    returnDate: null
+                },
+                {
+                    id: 'book2',
+                    title: 'Dom Casmurro',
+                    author: 'Machado de Assis',
+                    genre: ['Ficção', 'Romance'],
+                    cover: 'https://m.media-amazon.com/images/I/61Z2bMhGicL.jpg',
+                    status: 'available',
+                    returnDate: null
+                },
+                {
+                    id: 'book3',
+                    title: '1984',
+                    author: 'George Orwell',
+                    genre: ['Ficção', 'Ficção Científica'],
+                    cover: 'https://m.media-amazon.com/images/I/819js3EQwbL.jpg',
+                    status: 'available',
+                    returnDate: null
+                },
+                {
+                    id: 'book4',
+                    title: 'Sapiens: Uma Breve História da Humanidade',
+                    author: 'Yuval Noah Harari',
+                    genre: ['História', 'Não Ficção'],
+                    cover: 'https://m.media-amazon.com/images/I/81BTkpMrLYL.jpg',
+                    status: 'available',
+                    returnDate: null
+                },
+                {
+                    id: 'book5',
+                    title: 'O Hobbit',
+                    author: 'J.R.R. Tolkien',
+                    genre: ['Fantasia', 'Ficção'],
+                    cover: 'https://m.media-amazon.com/images/I/91M9xPIf10L.jpg',
+                    status: 'available',
+                    returnDate: null
+                },
+                {
+                    id: 'book6',
+                    title: 'Frankenstein',
+                    author: 'Mary Shelley',
+                    genre: ['Ficção Científica', 'Ficção'],
+                    cover: 'https://m.media-amazon.com/images/I/710p9SUfZtL._UF1000,1000_QL80_.jpg',
+                    status: 'available',
+                    returnDate: null
+                }
+            ];
+            saveBooks(initialBooks);
+        }
+		
+		const allButton = document.querySelector('.filter-buttons button[data-filter="all"]');
+        if (allButton) {
+            allButton.classList.add('active');
+        }
+
+        renderBooks();
     });
 </script>
 <script>
-    // --- COLE AQUI O BLOCO DE SCRIPT COMPLETO ---
-    // Este bloco contém todas as funções e listeners detalhados.
-    // O código acima é a estrutura, este é o conteúdo funcional completo.
-    function renderLoans() {
-        const loans = loadData('loans');
-        const books = loadData('books');
-        
-        pendingLoansTableBody.innerHTML = '';
-        activeLoansTableBody.innerHTML = '';
-        notificationsList.innerHTML = '';
-
-        const pending = loans.filter(loan => loan.status === 'pending');
-        const active = loans.filter(loan => loan.status === 'borrowed');
-        const overdueLoans = [];
-
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        if (pending.length === 0) {
-            pendingLoansTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhuma solicitação pendente.</td></tr>';
-        } else {
-            pending.forEach(loan => {
-                const book = books.find(b => b.id === loan.bookId);
-                const row = pendingLoansTableBody.insertRow();
-                row.innerHTML = `
-                    <td>${loan.studentName}</td>
-                    <td>${loan.studentClass}</td>
-                    <td>${book ? book.title : 'Livro não encontrado'}</td>
-                    <td><strong>${loan.loanCode}</strong></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-icon" data-action="confirm-loan" data-loan-id="${loan.id}" title="Confirmar Retirada">
-                                <i class="fas fa-check-circle"></i>
-                            </button>
-                        </div>
-                    </td>
-                `;
-            });
-        }
-
-        if (active.length === 0) {
-            activeLoansTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Nenhum livro emprestado no momento.</td></tr>';
-        } else {
-            active.forEach(loan => {
-                const book = books.find(b => b.id === loan.bookId);
-                const pickupDate = new Date(loan.pickupDate).toLocaleDateString('pt-BR');
-                const returnDateObj = new Date(loan.returnDate);
-                const returnDateStr = returnDateObj.toLocaleDateString('pt-BR');
-                
-                let statusHtml = '';
-                const isOverdue = today > returnDateObj;
-
-                if (isOverdue) {
-                    const daysOverdue = Math.floor((today - returnDateObj) / (1000 * 60 * 60 * 24));
-                    statusHtml = `<span class="status-badge overdue">${daysOverdue} dia(s) de atraso</span>`;
-                    overdueLoans.push({ loan, book, daysOverdue });
-                } else {
-                    statusHtml = `<span class="status-badge on-time">Em dia</span>`;
-                }
-
-                const row = activeLoansTableBody.insertRow();
-                row.innerHTML = `
-                    <td>${book ? book.title : 'Livro não encontrado'}</td>
-                    <td>${loan.studentName}</td>
-                    <td>${pickupDate}</td>
-                    <td>${returnDateStr}</td>
-                    <td>${statusHtml}</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-icon" data-action="mark-returned" data-loan-id="${loan.id}" title="Marcar como Devolvido">
-                                <i class="fas fa-check-double"></i>
-                            </button>
-                        </div>
-                    </td>
-                `;
-            });
-        }
-
-        const unseenOverdueLoans = overdueLoans.filter(item => !item.loan.notification_seen);
-        if (unseenOverdueLoans.length > 0) {
-            notificationCountBadge.textContent = unseenOverdueLoans.length;
-            notificationCountBadge.classList.add('show');
-        } else {
-            notificationCountBadge.classList.remove('show');
-        }
-        
-        if (overdueLoans.length > 0) {
-            overdueLoans.forEach(item => {
-                const seenClass = item.loan.notification_seen ? 'seen' : '';
-                const notificationHtml = `
-                    <div class="notification-item ${seenClass}">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <div>
-                            O empréstimo do livro <strong>${item.book.title}</strong> para <strong>${item.loan.studentName}</strong> está atrasado em <strong>${item.daysOverdue} dia(s)</strong>.
-                        </div>
-                        <button class="mark-as-seen-btn" data-loan-id="${item.loan.id}" title="Marcar como lida">
-                            <i class="fas fa-check"></i>
-                        </button>
-                    </div>
-                `;
-                notificationsList.innerHTML += notificationHtml;
-            });
-        } else {
-            notificationsList.innerHTML = '<p style="text-align: center; padding: 20px;">Nenhum empréstimo em atraso. Bom trabalho!</p>';
-        }
-    }
-
-    function updatePageHeader(tabKey) {
-        const info = pageInfo[tabKey];
-        if (info) {
-            pageTitle.textContent = info.title;
-            pageSubtitle.textContent = info.subtitle;
-            pageTitleIcon.className = info.icon;
-        }
-    }
-
-    function switchToTab(tabKey) {
-        const targetTabButton = document.querySelector(`.tab-button[data-tab="${tabKey}"]`);
-        const targetTabContent = document.getElementById(tabKey);
-
-        if (!targetTabButton || !targetTabContent) {
-            console.warn(`Tab com a chave "${tabKey}" não encontrada. Voltando para o padrão.`);
-            switchToTab('manageBooks');
-            return;
-        }
-
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
-
-        targetTabButton.classList.add('active');
-        targetTabContent.classList.add('active');
-
-        updatePageHeader(tabKey);
-    }
-
-    const allModals = document.querySelectorAll('.modal-overlay');
-    allModals.forEach(modal => {
-        const closeButtons = modal.querySelectorAll('.modal-close-btn');
-        closeButtons.forEach(button => button.addEventListener('click', () => modal.classList.remove('show')));
-        modal.addEventListener('click', e => {
-            if (e.target === modal) modal.classList.remove('show');
-        });
-    });
-    
-    function showConfirmationModal({ title, message, details, confirmText = 'Confirmar', confirmClass = 'btn-success' }) {
-        confirmModalTitle.textContent = title;
-        confirmModalBtnConfirm.innerHTML = `<i class="fas fa-check"></i> ${confirmText}`;
-        confirmModalBtnCancel.innerHTML = `<i class="fas fa-times"></i> Cancelar`;
-        confirmModalBtnConfirm.className = `btn ${confirmClass}`;
-
-        if (details) {
-            confirmModalRichContent.style.display = 'flex';
-            confirmModalSimpleMessage.style.display = 'none';
-            document.getElementById('confirmModalBookCover').src = details.bookCover;
-            document.getElementById('confirmModalStudentName').textContent = details.studentName;
-            document.getElementById('confirmModalBookTitle').textContent = details.bookTitle;
-            document.getElementById('confirmModalLoanCode').textContent = details.loanCode;
-            document.getElementById('confirmModalPickupDate').textContent = details.pickupDate;
-            document.getElementById('confirmModalReturnDate').textContent = details.returnDate;
-        } else {
-            confirmModalRichContent.style.display = 'none';
-            confirmModalSimpleMessage.style.display = 'block';
-            confirmModalSimpleMessage.innerHTML = message;
-        }
-
-        confirmationModal.classList.add('show');
-
-        return new Promise((resolve, reject) => {
-            const cleanUpAndClose = (callback) => {
-                confirmationModal.classList.remove('show');
-                confirmModalBtnConfirm.onclick = null;
-                confirmModalBtnCancel.onclick = null;
-                callback();
-            };
-            
-            confirmModalBtnConfirm.onclick = () => cleanUpAndClose(resolve);
-            confirmModalBtnCancel.onclick = () => cleanUpAndClose(reject);
-            confirmationModal.querySelector('.modal-close-btn').onclick = () => cleanUpAndClose(reject);
-        });
-    }
-    
-    async function confirmLoan(loanId) {
-        const loans = loadData('loans');
-        const loanToConfirm = loans.find(l => l.id === loanId);
-        if(!loanToConfirm) return;
-        const books = loadData('books');
-        const book = books.find(b => b.id === loanToConfirm.bookId);
-
-        const pickupDate = new Date();
-        const returnDate = new Date();
-        returnDate.setDate(pickupDate.getDate() + 30);
-
-        try {
-            await showConfirmationModal({
-                title: 'Confirmar Retirada de Livro',
-                details: {
-                    studentName: loanToConfirm.studentName,
-                    bookTitle: book.title,
-                    bookCover: book.cover || placeholderImg,
-                    loanCode: loanToConfirm.loanCode,
-                    pickupDate: pickupDate.toLocaleDateString('pt-BR'),
-                    returnDate: returnDate.toLocaleDateString('pt-BR')
-                },
-                confirmText: 'Confirmar',
-                confirmClass: 'btn-success'
-            });
-
-            const updatedLoans = loans.map(l => l.id === loanId ? { ...l, status: 'borrowed', pickupDate: pickupDate.toISOString(), returnDate: returnDate.toISOString(), notification_seen: false } : l );
-            const updatedBooks = books.map(b => b.id === loanToConfirm.bookId ? { ...b, status: 'borrowed' } : b);
-            saveData('loans', updatedLoans);
-            saveData('books', updatedBooks);
-            renderAll();
-        } catch {}
-    }
-
-    async function returnLoan(loanId) {
-        const loans = loadData('loans');
-        const loanToReturn = loans.find(l => l.id === loanId);
-        if(!loanToReturn) return;
-        const books = loadData('books');
-        const book = books.find(b => b.id === loanToReturn.bookId);
-
-        try {
-            await showConfirmationModal({
-                title: 'Registrar Devolução',
-                message: `Deseja confirmar a devolução do livro <strong>"${book.title}"</strong> por <strong>${loanToReturn.studentName}</strong>?`,
-                confirmText: 'Sim, Devolver',
-                confirmClass: 'btn-success'
-            });
-
-            const updatedLoans = loans.filter(l => l.id !== loanId);
-            const updatedBooks = books.map(b => b.id === loanToReturn.bookId ? { ...b, status: 'available' } : b);
-            saveData('loans', updatedLoans);
-            saveData('books', updatedBooks);
-            renderAll();
-        } catch {}
-    }
-	
-    window.addEventListener('popstate', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const page = urlParams.get('page');
-        switchToTab(page || 'manageBooks');
-    });
-
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const tabKey = button.dataset.tab;
-            
-            const currentUrlParams = new URLSearchParams(window.location.search);
-            if (currentUrlParams.get('page') !== tabKey) {
-                const newUrl = `${window.location.pathname}?page=${tabKey}`;
-                history.pushState({ path: newUrl }, '', newUrl);
-            }
-            
-            switchToTab(tabKey);
-
-            if (window.innerWidth <= 992) {
-                sidebar.classList.remove('show');
-                overlay.classList.remove('show');
-            }
-        });
-    });
-
-	addBookBtn.addEventListener('click', async () => {
-		const title = newBookTitleInput.value.trim();
-		const author = newBookAuthorInput.value.trim();
-		const selectedGenres = Array.from(document.querySelectorAll('.genre-options input:checked')).map(cb => cb.value);
-		const coverURL = newBookCoverURLInput.value.trim();
-		const coverFile = newBookCoverFileInput.files[0];
-		if (!title || !author || selectedGenres.length === 0) {
-			alert('Preencha Título, Autor e pelo menos um Gênero.');
-			return;
-		}
-		let bookCover = coverURL;
-		if (coverFile) {
-            bookCover = await new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = () => resolve('');
-                reader.readAsDataURL(coverFile);
-            });
-        }
-		let books = loadData('books');
-		if (editingBookId) {
-			books = books.map(book => {
-				if (book.id === editingBookId) {
-					return { ...book, title, author, genre: selectedGenres, cover: bookCover || book.cover };
-				}
-				return book;
-			});
-		} else {
-			const newBook = {
-				id: generateUniqueId(),
-				title, author, genre: selectedGenres,
-				cover: bookCover || placeholderImg,
-				status: 'available', returnDate: null
-			};
-			books.push(newBook);
-		}
-		saveData('books', books);
-		renderAll();
-        bookModal.classList.remove('show');
-	});
-	
-	currentBooksTableBody.addEventListener('click', async (event) => {
-        const targetButton = event.target.closest('button[data-action]');
-        if (!targetButton) return;
-		const action = targetButton.dataset.action;
-		const bookId = targetButton.dataset.bookId;
-
-		if (action === 'delete') {
-            try {
-                await showConfirmationModal({
-                    title: 'Excluir Livro',
-                    message: 'Tem certeza que deseja excluir este livro? <br><strong>Esta ação não pode ser desfeita.</strong>',
-                    confirmText: 'Sim, Excluir',
-                    confirmClass: 'btn-danger'
-                });
-				saveData('books', loadData('books').filter(book => book.id !== bookId));
-				renderAll();
-            } catch {}
-		} else if (action === 'edit') {
-			const bookToEdit = loadData('books').find(book => book.id === bookId);
-			if (bookToEdit) {
-                bookModalPreviewContainer.style.display = 'flex';
-                bookModalCoverPreview.src = bookToEdit.cover || placeholderImg;
-				modalTitle.textContent = 'Editar Livro';
-                addBookBtn.innerHTML = '<i class="fas fa-save"></i> Salvar Alterações';
-				newBookTitleInput.value = bookToEdit.title;
-				newBookAuthorInput.value = bookToEdit.author;
-				newBookCoverURLInput.value = bookToEdit.cover && !bookToEdit.cover.startsWith('data:') ? bookToEdit.cover : '';
-				document.querySelectorAll('.genre-options input').forEach(cb => {
-					cb.checked = bookToEdit.genre.includes(cb.value);
-				});
-				editingBookId = bookId;
-                [newBookTitleInput, newBookAuthorInput, newBookCoverURLInput].forEach(input => {
-                    if (input.value) {
-                        const label = input.nextElementSibling;
-                        if(label && label.classList.contains('form-label')) {
-                            label.style.top = '0';
-                            label.style.fontSize = '0.8em';
-                        }
-                    }
-                });
-                bookModal.classList.add('show');
-			}
-		}
-	});
-
-    newBookCoverURLInput.addEventListener('input', () => {
-        if(bookModalPreviewContainer.style.display !== 'none') {
-            bookModalCoverPreview.src = newBookCoverURLInput.value || placeholderImg;
-        }
-    });
-
-    newBookCoverFileInput.addEventListener('change', () => {
-        if (newBookCoverFileInput.files.length > 0) {
-            const file = newBookCoverFileInput.files[0];
-            fileNameDisplay.textContent = file.name;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                if(bookModalPreviewContainer.style.display !== 'none') {
-                    bookModalCoverPreview.src = e.target.result;
-                }
-            };
-            reader.readAsDataURL(file);
-        } else {
-            fileNameDisplay.textContent = '';
-        }
-    });
-	
-	searchLoanCodeBtn.addEventListener('click', () => {
-		const code = loanCodeInput.value.trim().toUpperCase();
-		if (!code) { alert('Digite um código.'); return; }
-		const loan = loadData('loans').find(l => l.loanCode === code && l.status === 'pending');
-		if (loan) {
-            confirmLoan(loan.id);
-            loanCodeInput.value = '';
-        } else {
-			alert('Código não encontrado ou já utilizado.');
-		}
-	});
-
-    document.getElementById('manageLoans').addEventListener('click', (e) => {
-        const target = e.target.closest('button[data-action]');
-        if(!target) return;
-        const action = target.dataset.action;
-        const loanId = target.dataset.loanId;
-        if(action === 'confirm-loan') confirmLoan(loanId);
-        if(action === 'mark-returned') returnLoan(loanId);
-    });
-
-	confirmReturnBtn.addEventListener('click', () => {
-		const searchTerm = returnBookCodeInput.value.trim().toUpperCase();
-		if (!searchTerm) { alert('Digite um código de livro ou nome de aluno.'); return; }
-		const loan = loadData('loans').find(l => (l.loanCode === searchTerm || l.studentName.toUpperCase().includes(searchTerm)) && l.status === 'borrowed');
-		if (loan) {
-            returnLoan(loan.id);
-            returnBookCodeInput.value = '';
-        } else {
-			alert('Nenhum empréstimo ativo encontrado.');
-		}
-	});
-
-    notificationsList.addEventListener('click', (e) => {
-        const target = e.target.closest('.mark-as-seen-btn');
-        if (!target) return;
-
-        const loanId = target.dataset.loanId;
-        const loans = loadData('loans');
-        const updatedLoans = loans.map(loan => {
-            if (loan.id === loanId) {
-                return { ...loan, notification_seen: true };
-            }
-            return loan;
-        });
-        saveData('loans', updatedLoans);
-        renderAll();
-    });
-
-    adminLogoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('isLoggedIn');
-        window.location.href = 'index.html';
-    });
-
-    subTabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            subTabButtons.forEach(btn => btn.classList.remove('active'));
-            subTabContents.forEach(content => content.classList.remove('active'));
-            button.classList.add('active');
-            document.getElementById(button.dataset.subtab).classList.add('active');
-        });
-    });
-
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('show');
-        overlay.classList.toggle('show');
-    });
-
-    overlay.addEventListener('click', () => {
-        sidebar.classList.remove('show');
-        overlay.classList.remove('show');
-    });
-</script>
+    (function(d){
+      var s = d.createElement("script");
+      s.setAttribute("data-account", "8b1e7e2d-7e7e-4b7e-8e7e-2d7e7e4b7e8e"); // ID de demonstração
+      s.src="https://cdn.userway.org/widget.js";
+      (d.body || d.head).appendChild(s);
+    })(document)
+    </script>
 </body>
 </html>
