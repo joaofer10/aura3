@@ -12,9 +12,9 @@
 
     /* Variáveis de cor e fonte (copiadas do seu style.css principal para consistência) */
     :root {
-        --cor-destaque: #4A6349; /* Verde mais escuro */
-        --cor-secundaria: #A0B99F; /* Verde claro */
-        --cor-principal: #C8D8BF; /* Verde muito claro */
+        --cor-destaque: #531a02;
+        --cor-secundaria: #a93304;
+        --cor-principal: #993d31;
         --cor-fundo: #f8f9fa; /* Fundo padrão */
         --cor-branco: #ffffff;
         --cor-texto: #212529; /* Texto escuro */
@@ -58,6 +58,10 @@
         overflow: hidden;
     }
 
+    .login-btn {
+        font-family: var(--font-heading);
+    }
+
     .login-wrapper::before {
         content: '';
         position: absolute;
@@ -85,11 +89,10 @@
 
     .login-header {
     margin-bottom: 30px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 3vh 0 ;
     /* Voltar para uma cor mais suave ou remover, dependendo do que prefere */
     background-color: var(--cor-principal); /* Ou remova esta linha se quiser branco total */
-    border-radius: 10px 10px 0 0; /* Manter se gostou */
+    border-radius: 1vh; /* Manter se gostou */
 }
 
 .login-header img {
@@ -108,7 +111,7 @@
     .login-header h2 {
         font-family: var(--font-heading);
         font-size: 1.5em;
-        color: var(--cor-destaque);
+        color: var(--cor-cinza-claro);
         margin: 0;
     }
 
@@ -157,7 +160,7 @@
     }
 
     .login-btn:hover {
-        background-color: #3a5039; /* Um tom mais escuro do verde destaque */
+        background-color: var(--cor-secundaria); /* Um tom mais escuro do verde destaque */
         transform: translateY(-2px);
     }
 

@@ -12,14 +12,14 @@
     <style>
 :root {
     /* Paleta de Cores Verde com Alto Contraste */
-    --cor-destaque: #4A6349;
-    --cor-secundaria: #A0B99F;
-    --cor-principal: #C8D8BF;
+    --cor-destaque: #531a02;
+    --cor-secundaria: #a93304;
+    --cor-principal: #993d31;
     
     /* Cores Neutras e de Status */
     --cor-fundo: #f8f9fa;
     --cor-branco: #ffffff;
-    --cor-texto: #212529;
+    --cor-texto: #ffff;
     --cor-texto-claro: #f8f9fa;
     --cor-sucesso: #28a745;
     --cor-erro: #dc3545;
@@ -95,7 +95,6 @@ header {
     align-items: center;
     gap: 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    border-bottom: 1px solid #eee;
     transition: padding-right 0.3s ease; /* Para o ajuste do widget de acessibilidade */
 }
 header h1 {
@@ -543,7 +542,7 @@ body.userway_widget_active header {
 }
 .btn-emprestar {
     background-color: var(--cor-secundaria);
-    color: var(--cor-destaque);
+    color: var(--cor-body);
     font-weight: 600;
     padding: 8px 15px;
     border: none;
@@ -606,7 +605,7 @@ body.userway_widget_active header {
 
 /* --- ESTILOS DO FOOTER --- */
 footer {
-    background: linear-gradient(135deg, #4A6349 0%, #3a4f39 100%);
+    background: var(--cor-destaque);
     color: var(--cor-texto-claro);
     padding: 25px 30px 15px 30px;
     margin-top: 30px;
@@ -797,6 +796,10 @@ footer {
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
+    .copyCodeBtn {
+        color: var(--cor-cinza-claro);
+    }
+
 .modal-loan-section input[type="text"]:focus {
     outline: none;
     border-color: var(--cor-destaque);
@@ -818,7 +821,7 @@ footer {
 }
 
 .modal-loan-section button:hover {
-    background-color: #3a4f39;
+    background-color: var(--cor-secundaria);
 }
 
 #loanSuccessMessage {
